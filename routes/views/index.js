@@ -9,6 +9,14 @@ exports = module.exports = function (req, res) {
 	// item in the header navigation.
 	locals.section = 'home';
 
+
+	Form = keystone.list('Form');
+	Form.model.find()
+		.where('ID','59ef8a058caa0046c9f3bbac')
+		.exec(function(err,forms){
+			//console.log(forms);
+			view.render('index');
+		});
 	// Render the view
-	view.render('index');
+	//view.render('index');
 };

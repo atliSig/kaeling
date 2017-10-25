@@ -11,7 +11,7 @@ var keystone = require('keystone');
 
 keystone.init({
 	'name': 'kaeling',
-	'brand': 'kaeling',
+	'brand': 'Kæling',
 
 	'less': 'public',
 	'static': 'public',
@@ -23,6 +23,10 @@ keystone.init({
 	'session': true,
 	'auth': true,
 	'user model': 'User',
+	'mongo': process.env.MONGODB_URI,
+
+	'signin redirect' : '/',
+	'signout redirect': '/'
 });
 
 // Load your project's Models
@@ -38,19 +42,25 @@ keystone.set('locals', {
 	editable: keystone.content.editable,
 });
 
+//Branding related
+keystone.set('signin logo', '../images/kaeling-logo.png')
+
+//Google API setting
+keystone.set('google api key', process.env.GOOGLE_API_KEY);
+//keystone.set('google server api key', process.env.GOOGLE_SERVER_KEY);
+keystone.set('default region', 'is');
+
 // Load your project's Routes
 keystone.set('routes', require('./routes'));
 
 
 // Configure the navigation bar in Keystone's Admin UI
 keystone.set('nav', {
-	galleries: 'galleries',
-	enquiries: 'enquiries',
 	users: 'users',
+	customers: 'customers',
+	forms: 'forms'
 });
 
 // Start Keystone to connect to your database and initialise the web server
-
-
 
 keystone.start();
