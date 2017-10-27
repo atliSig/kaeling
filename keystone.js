@@ -42,6 +42,9 @@ keystone.set('locals', {
 	editable: keystone.content.editable,
 });
 
+//use sass instead of less
+keystone.set('sass', 'public');
+
 //Branding related
 keystone.set('signin logo', '../images/kaeling-logo.png')
 

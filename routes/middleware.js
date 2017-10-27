@@ -9,7 +9,11 @@
  */
 var _ = require('lodash');
 
+var keystone = require('keystone');
+var Job = keystone.list('Job');
+var Customer  = keystone.list('Customer');
 
+var moment = require('moment');
 /**
 	Initialises the standard view locals
 
@@ -20,6 +24,7 @@ var _ = require('lodash');
 exports.initLocals = function (req, res, next) {
 	res.locals.navLinks = [
 		{ label: 'Heim', key: 'home', href: '/' },
+		{ label: 'Upcoming', key: 'upcoming', href: '/upcoming'}
 	];
 	res.locals.user = req.user;
 	next();
@@ -52,3 +57,22 @@ exports.requireUser = function (req, res, next) {
 		next();
 	}
 };
+
+
+/**
+ * Returns a list of all jobs that should be worked on within 2 weeks from
+ * now, and have not been finished for this period.
+ */
+exports.getUpcoming = function(req,res,next){
+	req.jobs = [];
+	Job.model.find().exec(function(err,jobs){
+			Object.keys(jobs).forEach(function(key) {
+				if(moment().subtract(2,'week').isAfter(moment(jobs[key].createdAt).add(jobs[key].period,'month'))){
+					if(!jobs[key].done){
+						req.jobs.push(jobs[key]);
+					}
+				}
+			});
+			next();
+	});
+}
