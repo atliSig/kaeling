@@ -7,23 +7,12 @@ block content
 				table.table
 					thead
 						tr
-						th(scope='col') #
-						th(scope='col') First Name
-						th(scope='col') Last Name
-						th(scope='col') Username
+							th(scope='col') Company
+							th(scope='col') Deadline
+							th(scope='col') Job done
 					tbody
-						tr
-						th(scope='row') 1
-						td Mark
-						td Otto
-						td @mdo
-						tr
-						th(scope='row') 2
-						td Jacob
-						td Thornton
-						td @fat
-						tr
-						th(scope='row') 3
-						td Larry
-						td the Bird
-						td @twitter
+						each job in jobs
+							tr
+								td=job.customerObject.name
+								td=job.prettyDate
+								td=job.createdAt

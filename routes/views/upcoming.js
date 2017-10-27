@@ -1,11 +1,9 @@
 var keystone = require('keystone');
-
+var moment = require('moment');
 exports = module.exports = function(req,res){
 
     var view = new keystone.View(req,res);
     var locals = res.locals;
-
     locals.section = 'upcoming';
-    console.log(req.jobs);
-    view.render('upcoming');
+    view.render('upcoming',{jobs:req.jobs});
 }

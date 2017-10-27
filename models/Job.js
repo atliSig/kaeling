@@ -13,10 +13,12 @@ var Job = new keystone.List('Job',{
 
 Job.add({
     //name: {type: Types.Text, required:true, default:'Nýtt verk'},
-    customer: {type: Types.Relationship, ref:'Customer', label:'Viðskiptavinur'},
-    period: {type: Types.Number, default:6, label:'Tíðni skoðana'},
+    customer: {type: Types.Relationship, ref:'Customer', label:'Viðskiptavinur', initial:true},
+    period: {type: Types.Number, default:6, label:'Tíðni skoðana',initial:true},
     createdAt: {type: Date, default: Date.now, label:'Verkþáttur búinn til þann'},
-    done: {type: Types.Boolean, default: 'false', label: 'Er verkinu lokið?'},
+    done: {type: Types.Boolean, default: false, label: 'Er verkinu lokið?'},
+    doneNow: {type: Types.Boolean, default: false}
+
 });
 
 /**

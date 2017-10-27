@@ -24,7 +24,8 @@ var moment = require('moment');
 exports.initLocals = function (req, res, next) {
 	res.locals.navLinks = [
 		{ label: 'Heim', key: 'home', href: '/' },
-		{ label: 'Upcoming', key: 'upcoming', href: '/upcoming'}
+		{ label: 'Áríðaðandi', key: 'upcoming', href: '/upcoming'},
+		{ label: 'Umsjónarkerfi', key: 'keystone', href:'/keystone'}
 	];
 	res.locals.user = req.user;
 	next();
@@ -67,12 +68,32 @@ exports.getUpcoming = function(req,res,next){
 	req.jobs = [];
 	Job.model.find().exec(function(err,jobs){
 			Object.keys(jobs).forEach(function(key) {
-				if(moment().subtract(2,'week').isAfter(moment(jobs[key].createdAt).add(jobs[key].period,'month'))){
-					if(!jobs[key].done){
+				//if(moment().subtract(2,'week').isAfter(moment(jobs[key].createdAt).add(jobs[key].period,'month'))){
+					if(!jobs[key].done && !jobs[key].doneNow){
+						jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
 						req.jobs.push(jobs[key]);
 					}
-				}
+				//}
 			});
 			next();
+	});
+}
+
+exports.setCustomers = function(req,res,next){
+	customerIds = [];
+	req.jobs.forEach(function(job){
+		customerIds.push(job.customer);
+	})
+	Customer.model.find({
+		'_id': { $in: customerIds}
+	}, function(err, customers){
+		for(var i=0; i<req.jobs.length; i++){
+			for(var j=0; j<customers.length; j++){
+				if(req.jobs[i].customer.toString() == customers[j]._id.toString()){
+					req.jobs[i].customerObject = customers[j];
+				}
+			}
+		}
+		next();
 	});
 }
