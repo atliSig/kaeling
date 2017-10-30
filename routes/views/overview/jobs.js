@@ -1,5 +1,5 @@
 /**
- * Will show all the forms that the signed in person has been working on
+ * Shows a list of all jobs
  */
 
 var keystone = require('keystone');
@@ -12,7 +12,7 @@ exports = module.exports = function (req, res) {
 
 	// locals.section is used to set the currently selected
 	// item in the header navigation.
-	locals.section = 'home';
+	locals.section = 'jobs';
 
-	view.render('index', {forms: req.forms});
+	view.render('overview/jobs', {jobs: req.jobs});
 };

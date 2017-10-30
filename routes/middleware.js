@@ -12,6 +12,9 @@ var _ = require('lodash');
 var keystone = require('keystone');
 var Job = keystone.list('Job');
 var Customer  = keystone.list('Customer');
+var Form = keystone.list('Form');
+var User = keystone.list('User');
+
 
 var moment = require('moment');
 /**
@@ -24,8 +27,11 @@ var moment = require('moment');
 exports.initLocals = function (req, res, next) {
 	res.locals.navLinks = [
 		{ label: 'Heim', key: 'home', href: '/' },
+		{ label: 'Verkefni', key:'jobs', href:'/jobs'},
+		{ label: 'Skýrslur', key:'forms', href:'/forms'},
+		{ label: 'Fyrirtæki', key: 'customers', href:'/customers'},
+		{ label: 'Notendur', key:'users', href:'/users'},
 		{ label: 'Áríðaðandi', key: 'upcoming', href: '/upcoming'},
-		{ label: 'Umsjónarkerfi', key: 'keystone', href:'/keystone'}
 	];
 	res.locals.user = req.user;
 	next();
@@ -97,3 +103,73 @@ exports.setCustomers = function(req,res,next){
 		next();
 	});
 }
+
+exports.getFormsByUser = function(req,res,next){
+	Form.model.find({user:req.user._id}).exec(function(err,forms){
+		req.forms = forms;
+		next();
+	});
+}
+
+
+/**
+ * Middleware for selecting in bulk,
+ * consider pagination here later
+ */
+exports.getAllJobs = function(req,res,next){
+	Job.model.find().exec(function(err,jobs){
+		req.jobs = jobs;
+		next();
+	});
+}
+
+exports.getAllUsers = function(req,res,next){
+	User.model.find().exec(function(err,users){
+		req.users = users;
+		next();
+	});
+}
+
+exports.getAllCustomers = function(req,res,next){
+	Customer.model.find().exec(function(err,customers){
+		req.customers = customers;
+		next();
+	});
+}
+
+exports.getAllForms = function(req,res,next){
+	Form.model.find().exec(function(err,forms){
+		req.forms = forms;
+		next();
+	});
+}
+
+/**
+ * Middleware for endpoints
+ */
+
+exports.getJobById = function(req,res,next){
+	Job.model.findById(req.params.jobId, function(err,job){
+		req.job = job;
+		next();
+	});
+}
+exports.getUserById = function(req,res,next){
+	User.model.findById(req.params.userId, function(err,user){
+		req.user = user;
+		next();
+	});
+}
+exports.getFormById = function(req,res,next){
+	Form.model.findById(req.params.formId, function(err,form){
+		req.form = form;
+		next();
+	});
+}
+exports.getCustomerById = function(req,res,next){
+	Customer.model.findById(req.params.customerId, function(err,customer){
+		req.customer = customer;
+		next();
+	});
+}
+

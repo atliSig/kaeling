@@ -1,9 +1,8 @@
 /**
- * Will show all the forms that the signed in person has been working on
+ * Shows a list of all customers
  */
 
 var keystone = require('keystone');
-var Form = keystone.list('Form');
 
 exports = module.exports = function (req, res) {
 
@@ -12,7 +11,7 @@ exports = module.exports = function (req, res) {
 
 	// locals.section is used to set the currently selected
 	// item in the header navigation.
-	locals.section = 'home';
+	locals.section = 'customers';
 
-	view.render('index', {forms: req.forms});
+	view.render('overview/customers', {customers: req.customers});
 };

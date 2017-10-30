@@ -19,12 +19,12 @@
  */
 
 var keystone = require('keystone');
-var middleware = require('./middleware');
+var mw = require('./middleware');
 var importRoutes = keystone.importer(__dirname);
 
 // Common Middleware
-keystone.pre('routes', middleware.initLocals);
-keystone.pre('render', middleware.flashMessages);
+keystone.pre('routes', mw.initLocals);
+keystone.pre('render', mw.flashMessages);
 
 // Import Route Controllers
 var routes = {
@@ -33,10 +33,48 @@ var routes = {
 
 // Setup Route Bindings
 exports = module.exports = function (app) {
-	// Views
-	app.get('/',middleware.requireUser, routes.views.index);
-	app.get('/upcoming',middleware.requireUser, middleware.getUpcoming, middleware.setCustomers,routes.views.upcoming);
-	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
-	// app.get('/protected', middleware.requireUser, routes.views.protected);
+	// Ensure user on all routes
+	app.all('*', mw.requireUser);
+	/**
+	 * General routes
+	 */
+	app.get('/',
+		mw.getFormsByUser, 
+		routes.views.index);
+	// Upcoming jobs
+	app.get('/upcoming',
+		mw.getUpcoming,
+		mw.setCustomers,
+		routes.views.upcoming);
+	/**
+	 * Overview routes
+	 */	
+	app.get('/jobs',
+		mw.getAllJobs,
+		routes.views.overview.jobs);
+	app.get('/customers',
+		mw.getAllCustomers,
+		routes.views.overview.customers);
+	app.get('/forms',
+		mw.getAllForms,
+		routes.views.overview.forms);
+	app.get('/users',
+		mw.getAllUsers,
+		routes.views.overview.users);
 
+	/**
+	 * Endpoint routes
+	 */
+	app.get('/jobs/:jobId',
+		mw.getJobById,
+		routes.views.endpoint.job);
+	app.get('/forms/:formId',
+		mw.getFormById,
+		routes.views.endpoint.form);
+	app.get('/customers/:customerId',
+		mw.getCustomerById,
+		routes.views.endpoint.customer);
+	app.get('/users/:userId',
+		mw.getUserById,
+		routes.views.endpoint.user);
 };
