@@ -1,0 +1,12 @@
+mixin overview-table(titles,keys,data)
+	.table-responsive
+		table.table.table-hover.table
+			thead
+				tr
+					each title in titles
+						th(scope='col')=title
+			tbody
+				each d in data
+					tr
+						each k in keys
+							td=d[k]

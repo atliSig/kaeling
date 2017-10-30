@@ -13,5 +13,8 @@ exports = module.exports = function (req, res) {
 	// item in the header navigation.
 	locals.section = 'users';
 
-	view.render('overview/users', {users: req.users});
+	view.render('overview', {
+		data: req.users,
+		keys:['name','email','prettyDate'],
+		titles:['Nafn', 'Póstur', 'Færður inn']});
 };

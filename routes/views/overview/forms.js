@@ -12,6 +12,8 @@ exports = module.exports = function (req, res) {
 	// locals.section is used to set the currently selected
 	// item in the header navigation.
 	locals.section = 'forms';
-
-	view.render('overview/forms', {forms: req.forms});
+	view.render('overview', {
+		data: req.forms,
+		keys:['customer','user','job','prettyDate'],
+		titles:['Viðskiptavinur','Starfsmaður','Yfirverk','Dagsetning']});
 };

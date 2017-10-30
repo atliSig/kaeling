@@ -14,5 +14,8 @@ exports = module.exports = function (req, res) {
 	// item in the header navigation.
 	locals.section = 'jobs';
 
-	view.render('overview/jobs', {jobs: req.jobs});
+	view.render('overview', {
+		data: req.jobs,
+		keys:['name','customer','prettyDate'],
+		titles:['Nafn','Viðskiptavinur','Fært inn']});
 };
