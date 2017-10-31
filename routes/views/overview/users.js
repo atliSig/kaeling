@@ -21,8 +21,8 @@ exports = module.exports = function (req, res) {
 			'email':req.users[key].email,
 			'date':req.users[key].prettyDate});
 	});
-	console.log(Object.keys(selected));
 	view.render('overview', {
+		type: 'users',
 		data: req.users,
 		selected: selected,
 		titles:['Nafn', 'Póstur', 'Færður inn']});

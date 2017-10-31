@@ -9,5 +9,5 @@ exports = module.exports = function (req, res) {
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
 
-	view.render('endpoint/user', {user: req.user});
+	view.render('user', {user: req.user});
 };

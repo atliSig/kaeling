@@ -19,6 +19,7 @@ exports = module.exports = function (req, res) {
 	});
 	locals.section = 'customers';
 	view.render('overview', {
+		type:'customers',
 		data: req.customers,
 		selected:selected,
 		titles:['Fyrirtæki','Staður','Fært inn']});

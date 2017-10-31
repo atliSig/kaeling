@@ -24,6 +24,7 @@ exports = module.exports = function (req, res) {
 	});
 
 	view.render('overview', {
+		type:'jobs',
 		data: req.jobs,
 		selected: selected,
 		titles:['Nafn','Viðskiptavinur','Fært inn']});

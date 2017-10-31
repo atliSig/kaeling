@@ -11,13 +11,12 @@ exports = module.exports = function (req, res) {
 	
 	locals.section = 'forms';
 	
-	console.log(req.forms);
 	selected = [];
 	Object.keys(req.forms).forEach(function(key) {
 		selected.push({
 			'link':req.forms[key]._id,
 			'name':req.forms[key].name,
-			'customer':req.forms[key].customer.name,
+			'customer':req.forms[key].job.customer.name,
 			'user':req.forms[key].user.name,
 			'job': req.forms[key].job.name,
 			'date':req.forms[key].prettyDate,
@@ -25,6 +24,7 @@ exports = module.exports = function (req, res) {
 	});
 
 	view.render('overview', {
+		type:'forms',
 		data: req.forms,
 		selected: selected,
 		titles:['nafn','Viðskiptavinur','Starfsmaður','Yfirverk','Dagsetning']});

@@ -14,16 +14,16 @@ var Form = new keystone.List('Form',{
 Form.add({
     name: { type: String, required: true, initial:true, default:'Ný skýrsla'},
     user: {type: Types.Relationship, ref:'User', label:'Starfsmaður', initial:true},
-    job: {type: Types.Relationship, ref:'Job', label:'yfirverk'},
-    customer: {type: Types.Relationship, ref:'Customer', label:'Viðskiptavinur', initial:true},
+    job: {type: Types.Relationship, ref:'Job', label:'yfirverk', initial:true},
     date: {type: Date, default:Date.now},
     systemName: {type: String, required:false, label:'Heiti kerfis'},
-    q1: {
+    diary: {type:Types.Textarea, required:false, label:'Dagbók'}
+    /*q1: {
         whichType: {type: String, label: 'Tegund'},
         isOk: {type: Types.Boolean, label:'Í lagi'},
         isFixed: {type: Types.Boolean, label:'Viðgert'},
         comment: {type: String, label: 'Athugasemd'}
-    },
+    },*/
     
 });
 

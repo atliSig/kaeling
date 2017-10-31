@@ -1,20 +1,17 @@
 extends ../layouts/default
+include ../mixins/tables.pug
 
 block content
+
 	.container-fluid
+		.row
+			.col-12
 		.row
 			.col-12
 				h3 Mínar skýrslur
 			.col-12
-				table.table.table-hover
-					thead
-						tr
-							th(scope='col') Company
-							th(scope='col') Deadline
-							th(scope='col') Job done
-					tbody
-						each form in forms
-							tr(onclick="window.location.assign('/upcoming')")
-								td=form.customer
-								td=form.date
-								td=form.user
+				+overview-table('forms',formTitles,formSelected)
+			.col-12
+				h3 Mín verkefni
+			.col-12
+				+overview-table('jobs',jobTitles,jobSelected)

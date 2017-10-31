@@ -13,6 +13,7 @@ var Job = new keystone.List('Job',{
 
 Job.add({
     name: { type: String, required: true, initial:true, default:'Nýtt verk'},
+    user: { type: Types.Relationship, ref:'User', label:'Eigandi verkefnis', initial:true},
     customer: {type: Types.Relationship, ref:'Customer', label:'Viðskiptavinur', initial:true},
     period: {type: Types.Number, default:6, label:'Tíðni skoðana',initial:true},
     createdAt: {type: Date, default: Date.now, label:'Verkþáttur búinn til þann'},

@@ -104,13 +104,41 @@ exports.setCustomers = function(req,res,next){
 	});
 }
 
+/**
+ * Middleware for the index
+ */
 exports.getFormsByUser = function(req,res,next){
-	Form.model.find({user:req.user._id}).exec(function(err,forms){
+	Form.model.find({user:req.user._id})
+	.populate({
+		path:'job',
+		model:'Job',
+		populate:{
+			path:'customer',
+			model:'Customer'
+		}
+	})
+	.exec(function(err,forms){
+		Object.keys(forms).forEach(function(key) {
+			forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
+		});
 		req.forms = forms;
 		next();
 	});
 }
 
+exports.getJobsByUser = function(req,res,next){
+	Job.model.find({user:req.user._id})
+	.populate('user')
+	.populate('customer')
+	.exec(function(err,jobs){
+		console.log(req.user._id);
+		Object.keys(jobs).forEach(function(key) {
+			jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
+		});
+		req.jobs = jobs;
+		next();
+	});
+}
 
 /**
  * Middleware for selecting in bulk,
@@ -148,8 +176,14 @@ exports.getAllCustomers = function(req,res,next){
 
 exports.getAllForms = function(req,res,next){
 	Form.model.find()
-			.populate('job')
-			.populate('customer')
+			.populate({
+				path:'job',
+				model:'Job',
+				populate:{
+					path:'customer',
+					model:'Customer'
+				}
+			})
 			.populate('user')
 			.exec(function(err,forms){
 				Object.keys(forms).forEach(function(key) {
@@ -165,10 +199,14 @@ exports.getAllForms = function(req,res,next){
  */
 
 exports.getJobById = function(req,res,next){
-	Job.model.findById(req.params.jobId, function(err,job){
-		req.job = job;
-		next();
-	});
+	Job.model.findOne({_id:req.params.jobId})
+		.populate('user')
+		.populate('customer')
+		.exec(function(err,job){
+			job.prettyDate = moment(job.createdAt).format("MMM Do YY");
+			req.job = job;
+			next();
+		});
 }
 exports.getUserById = function(req,res,next){
 	User.model.findById(req.params.userId, function(err,user){
@@ -188,4 +226,29 @@ exports.getCustomerById = function(req,res,next){
 		next();
 	});
 }
+
+/**
+ * Endpoint specific middleware
+ */
+
+ exports.getFormsByJobId = function(req,res,next){
+	 Form.model.find({job:req.params.jobId})
+			.populate({
+				path:'job',
+				model:'Job',
+				populate:{
+					path:'customer',
+					model:'Customer'
+				}
+			})
+			.populate('user')
+			.exec(function(err,forms){
+				Object.keys(forms).forEach(function(key) {
+					forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
+				});
+				req.forms = forms;
+				next();
+			});
+ }
+
 

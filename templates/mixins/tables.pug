@@ -1,13 +1,13 @@
-mixin overview-table(titles,keys,data)
+mixin overview-table(type,titles,selected,data)
 	.table-responsive
-		table.table.table-hover.table
+		table.table.table-hover
 			thead
 				tr
 					each title in titles
 						th(scope='col')=title
 			tbody
 				each s in selected
-					tr.clickable(data-href=s.link)
+					tr.clickable(data-href=s.link, data-type=type)
 						each val, i in s
 							if i !=='link'
 								td=val
