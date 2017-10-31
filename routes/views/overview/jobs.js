@@ -14,8 +14,17 @@ exports = module.exports = function (req, res) {
 	// item in the header navigation.
 	locals.section = 'jobs';
 
+	selected = [];
+	Object.keys(req.jobs).forEach(function(key) {
+		selected.push({
+			'link':req.jobs[key]._id,
+			'name':req.jobs[key].name,
+			'customer':req.jobs[key].customer.name,
+			'date':req.jobs[key].prettyDate});
+	});
+
 	view.render('overview', {
 		data: req.jobs,
-		keys:['name','customer','prettyDate'],
+		selected: selected,
 		titles:['Nafn','Viðskiptavinur','Fært inn']});
 };

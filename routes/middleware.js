@@ -117,7 +117,7 @@ exports.getFormsByUser = function(req,res,next){
  * consider pagination here later
  */
 exports.getAllJobs = function(req,res,next){
-	Job.model.find().exec(function(err,jobs){
+	Job.model.find().populate('customer').exec(function(err,jobs){
 		Object.keys(jobs).forEach(function(key) {
 			jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
 		});
@@ -147,13 +147,17 @@ exports.getAllCustomers = function(req,res,next){
 }
 
 exports.getAllForms = function(req,res,next){
-	Form.model.find().exec(function(err,forms){
-		Object.keys(forms).forEach(function(key) {
-			forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
-		});
-		req.forms = forms;
-		next();
-	});
+	Form.model.find()
+			.populate('job')
+			.populate('customer')
+			.populate('user')
+			.exec(function(err,forms){
+				Object.keys(forms).forEach(function(key) {
+				forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
+				});
+				req.forms = forms;
+				next();
+			});
 }
 
 /**

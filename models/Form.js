@@ -12,6 +12,7 @@ var Form = new keystone.List('Form',{
 });
 
 Form.add({
+    name: { type: String, required: true, initial:true, default:'Ný skýrsla'},
     user: {type: Types.Relationship, ref:'User', label:'Starfsmaður', initial:true},
     job: {type: Types.Relationship, ref:'Job', label:'yfirverk'},
     customer: {type: Types.Relationship, ref:'Customer', label:'Viðskiptavinur', initial:true},

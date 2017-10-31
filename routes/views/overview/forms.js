@@ -8,12 +8,24 @@ exports = module.exports = function (req, res) {
 
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
-
-	// locals.section is used to set the currently selected
-	// item in the header navigation.
+	
 	locals.section = 'forms';
+	
+	console.log(req.forms);
+	selected = [];
+	Object.keys(req.forms).forEach(function(key) {
+		selected.push({
+			'link':req.forms[key]._id,
+			'name':req.forms[key].name,
+			'customer':req.forms[key].customer.name,
+			'user':req.forms[key].user.name,
+			'job': req.forms[key].job.name,
+			'date':req.forms[key].prettyDate,
+			});
+	});
+
 	view.render('overview', {
 		data: req.forms,
-		keys:['customer','user','job','prettyDate'],
-		titles:['Viðskiptavinur','Starfsmaður','Yfirverk','Dagsetning']});
+		selected: selected,
+		titles:['nafn','Viðskiptavinur','Starfsmaður','Yfirverk','Dagsetning']});
 };

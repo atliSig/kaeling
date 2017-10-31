@@ -13,8 +13,17 @@ exports = module.exports = function (req, res) {
 	// item in the header navigation.
 	locals.section = 'users';
 
+	selected = [];
+	Object.keys(req.users).forEach(function(key) {
+		selected.push({
+			'link':req.users[key]._id,
+			'name':req.users[key].name,
+			'email':req.users[key].email,
+			'date':req.users[key].prettyDate});
+	});
+	console.log(Object.keys(selected));
 	view.render('overview', {
 		data: req.users,
-		keys:['name','email','prettyDate'],
+		selected: selected,
 		titles:['Nafn', 'Póstur', 'Færður inn']});
 };
