@@ -16,7 +16,7 @@ block content
 								h3.card-title=job.customer.name
 								p.card-text=job.customer.location.street1+', '+job.customer.location.suburb
 							.card-footer
-								a.btn.btn-primary.btn-sm.float-right(href='/customers/'+job.customer._id) skoða
+								a.btn.btn-primary.btn-sm.float-right(href='/customers/'+job.customer._id+'/') skoða
 						hr
 					.col-12
 						.card
@@ -24,6 +24,9 @@ block content
 								h3.card-title=job.user.name
 								p.card-text=job.user.email
 							.card-footer
-								a.btn.btn-primary.btn-sm.float-right(href='/users/'+job.user._id) skoða
+								a.btn.btn-primary.btn-sm.float-right(href='/users/'+job.user._id+'/') skoða
+						hr
+					.col-12
+							a.btn.btn-primary.float-right(href='edit/') Breyta verkefni
 			.col-xl-9.col-md-7.col-12.table-column
-				+overview-table(type,titles,selected,forms)
+				+overview-table(type,titles,selected)

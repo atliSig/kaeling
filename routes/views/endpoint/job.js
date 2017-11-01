@@ -4,8 +4,7 @@
 
 var keystone = require('keystone');
 
-exports = module.exports = function (req, res) {
-
+module.exports.get = function (req, res) {
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
 	selected = [];
@@ -25,3 +24,14 @@ exports = module.exports = function (req, res) {
 		titles:['Nafn','Starfsmaður','Dagsetning']}
 	);
 };
+
+module.exports.edit = function(req,res){
+	var view = new keystone.View(req, res);
+	var locals = res.locals;
+	view.render('edit/editjob', {
+		job: req.job, 
+		users:req.users,
+		customers:req.customers});
+}
+
+exports = module.exports;

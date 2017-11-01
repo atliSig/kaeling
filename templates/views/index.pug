@@ -8,21 +8,21 @@ block content
 			.col-12.table-column
 				ul.nav.nav-tabs.nav-fill(role='tablist')
 					li.nav-item
-						a.nav-link.active(href='#upcoming' data-toggle="tab" role="tab") Áríðandi
+						a.nav-link.active(href='#forms' data-toggle="tab" role="tab") Skýrslur
 					li.nav-item
-						a.nav-link(href='#jobs' data-toggle="tab" role="tab") Skýrslur
+						a.nav-link(href='#jobs' data-toggle="tab" role="tab") Verk
 					li.nav-item
-						a.nav-link(href='#forms' data-toggle="tab" role="tab") Verk
+						a.nav-link(href='#upcoming' data-toggle="tab" role="tab") Áríðandi
 				.tab-content
-					.tab-pane.active#upcoming(role='tabpanel')
-						.row
-							.col-12
-								+overview-table('upcoming',upcomingTitles,upcomingSelected)
-					.tab-pane#jobs(role='tabpanel')
+					.tab-pane.active#forms(role='tabpanel')
 						.row
 							.col-12
 								+overview-table('forms',formTitles,formSelected)
-					.tab-pane#forms(role='tabpanel')
+					.tab-pane#jobs(role='tabpanel')
 						.row
 							.col-12
 								+overview-table('jobs',jobTitles,jobSelected)
+					.tab-pane#upcoming(role='tabpanel')
+						.row
+							.col-12
+								+overview-table('upcoming',upcomingTitles,upcomingSelected)

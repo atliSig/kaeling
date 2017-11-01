@@ -25,7 +25,6 @@ exports = module.exports = function (req, res) {
 
 	view.render('overview', {
 		type:'forms',
-		data: req.forms,
 		selected: selected,
 		titles:['nafn','Viðskiptavinur','Starfsmaður','Yfirverk','Dagsetning']});
 };

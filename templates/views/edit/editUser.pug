@@ -1,0 +1,20 @@
+extends ../../layouts/default
+
+block content
+	.container.form-container
+		.row
+			.col-12
+				form(method='post')
+					.form-group
+						label(for='name') Nafn
+						input(name='name', type='text', value=user.name)#name.form-control
+					.form-group.row
+						.col-6
+							label(for='email') Email
+							input(name='email',type='email',value=user.email)#email.form-control
+						.col-6
+							label(for='warningDays') Viðvörunardagar
+							input(name='warningDays', type='number', value=user.warningDays)#warningDays.form-control
+					button.btn.btn-primary.float-right.right-button(type='submit') Breyta
+					a.btn.btn-secondary.float-right(href='../') Til baka
+

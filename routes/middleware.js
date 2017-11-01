@@ -68,7 +68,7 @@ exports.requireUser = function (req, res, next) {
 /**
  * Middleware for the index
  */
-exports.getFormsByUser = function (req, res, next) {
+exports.getFormsByCurrentUser = function (req, res, next) {
 	Form.model.find({ user: req.user._id })
 		.populate({
 			path: 'job',
@@ -87,7 +87,7 @@ exports.getFormsByUser = function (req, res, next) {
 		});
 }
 
-exports.getJobsByUser = function (req, res, next) {
+exports.getJobsByCurrentUser = function (req, res, next) {
 	Job.model.find({ user: req.user._id })
 		.populate('user')
 		.populate('customer')
@@ -192,7 +192,10 @@ exports.getFormById = function (req, res, next) {
 		});
 }
 exports.getCustomerById = function (req, res, next) {
-	Customer.model.findById(req.params.customerId, function (err, customer) {
+	Customer.model
+		.findOne({_id:req.params.customerId})
+		.populate('user')
+		.exec(function (err, customer) {
 		req.customer = customer;
 		next();
 	});
@@ -222,6 +225,38 @@ exports.getFormsByJobId = function (req, res, next) {
 		});
 }
 
+exports.getFormsByUserId = function (req, res, next) {
+	Form.model.find({ user: req.params.userId })
+		.populate({
+			path: 'job',
+			model: 'Job',
+			populate: {
+				path: 'customer',
+				model: 'Customer'
+			}
+		})
+		.exec(function (err, forms) {
+			Object.keys(forms).forEach(function (key) {
+				forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
+			});
+			req.forms = forms;
+			next();
+		});
+}
+
+exports.getJobsByCustomerId = function(req,res,next){
+	Job.model
+		.find({customer:req.params.customerId})
+		.populate('user')
+		.exec(function (err, jobs) {
+			Object.keys(jobs).forEach(function (key) {
+				jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
+			});
+			req.jobs = jobs;
+			next();
+		});
+}
+
 /**
  * For fetching all upcoming jobs
  */
@@ -246,26 +281,37 @@ exports.getUpcomingJobs = function (req, res, next) {
 }
 
 /**
- * Check if there is an upcoming job
+ * Update middleware
  */
-exports.getUpcomingJobs = function (req, res, next) {
-	Job.model.find()
-		.populate('user')
-		.populate('customer')
-		.exec(function (err, jobs) {
-			upcoming = [];
-			Object.keys(jobs).forEach(function (key) {
-				if (moment(jobs[key].createdAt).add(jobs[key].period, 'months').isAfter(moment().subtract(req.user.warningDays, 'days'))) {
-					if (moment(jobs[key].createdAt).add(jobs[key].period, 'months').isBefore(moment().add(req.user.warningDays, 'days'))) {
-						jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
-						jobs[key].deadline = moment(jobs[key].createdAt).add(jobs[key].period,'months').format("MMM Do YY");
-						upcoming.push(jobs[key]);
-					}
-				}
-			});
-			req.upcoming = upcoming;
+
+exports.updateForm = function(req,res,next){
+	Form.model.findById(req.params.formId).exec(function(err,form){
+		form.getUpdateHandler(req).process(req.body,function(err){
 			next();
-		});
+		})
+	});
 }
 
+exports.updateJob = function(req,res,next){
+	Job.model.findById(req.params.jobId).exec(function(err,job){
+		job.getUpdateHandler(req).process(req.body,function(err){
+			next();
+		})
+	});
+}
 
+exports.updateCustomer = function(req,res,next){
+	Customer.model.findById(req.params.customerId).exec(function(err,customer){
+		customer.getUpdateHandler(req).process(req.body,function(err){
+			next();
+		})
+	});
+}
+
+exports.updateUser = function(req,res,next){
+	User.model.findById(req.params.userId).exec(function(err,user){
+		user.getUpdateHandler(req).process(req.body,function(err){
+			next();
+		})
+	});
+}

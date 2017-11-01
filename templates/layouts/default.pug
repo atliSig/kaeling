@@ -1,4 +1,4 @@
-include ../mixins/flash-messages
+include ../mixins/info
 
 doctype html
 html
@@ -55,10 +55,16 @@ html
 
 			//- Flash messages allow you to display once-off status messages to users, e.g. form
 			//- validation errors, success messages, etc.
-			+flash-messages(messages)
+			//+info(message)
 
 			//- The content block should contain the body of your template's content
 			block content
+		//.card.info-card.lg-w-25
+				.card-block
+					h4.card-title Card title
+					p.card-text
+						| Some quick example text to build on the card title and make up the bulk of the card's content.
+					a.btn.btn-primary(href='#') Go somewhere
 
 
 		//- FOOTER
