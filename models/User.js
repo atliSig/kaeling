@@ -8,10 +8,29 @@ var Types = keystone.Field.Types;
 var User = new keystone.List('User');
 
 User.add({
-	name: { type: String, required: true, index: true, default:'Nýr starfsmaður' },
-	email: { type: Types.Email, initial: true, required: true, unique: true, index: true },
-	password: { type: Types.Password, initial: true, required: true },
-	createdAt: { type: Types.Date, default:Date.now}
+	name: { 
+		type: String, 
+		required: true, 
+		index: true, 
+		default:'Nýr starfsmaður' },
+	email: { 
+		type: Types.Email, 
+		initial: true, 
+		required: true, 
+		unique: true, 
+		index: true },
+	password: { 
+		type: Types.Password, 
+		initial: true, 
+		required: true },
+	createdAt: { 
+		type: Types.Date, 
+		default:Date.now},
+	warningDays: {
+		type: Types.Number, 
+		default:7, 
+		required:true, 
+		label:'Viðvörunardagar'},
 	}, 'Permissions', {
 		isAdmin: { type: Boolean, label: 'Can access Keystone', index: true },
 	}

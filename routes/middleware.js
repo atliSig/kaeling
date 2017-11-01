@@ -11,7 +11,7 @@ var _ = require('lodash');
 
 var keystone = require('keystone');
 var Job = keystone.list('Job');
-var Customer  = keystone.list('Customer');
+var Customer = keystone.list('Customer');
 var Form = keystone.list('Form');
 var User = keystone.list('User');
 
@@ -27,11 +27,11 @@ var moment = require('moment');
 exports.initLocals = function (req, res, next) {
 	res.locals.navLinks = [
 		{ label: 'Heim', key: 'home', href: '/' },
-		{ label: 'Verkefni', key:'jobs', href:'/jobs'},
-		{ label: 'Skýrslur', key:'forms', href:'/forms'},
-		{ label: 'Fyrirtæki', key: 'customers', href:'/customers'},
-		{ label: 'Notendur', key:'users', href:'/users'},
-		{ label: 'Áríðaðandi', key: 'upcoming', href: '/upcoming'},
+		{ label: 'Verkefni', key: 'jobs', href: '/jobs' },
+		{ label: 'Skýrslur', key: 'forms', href: '/forms' },
+		{ label: 'Fyrirtæki', key: 'customers', href: '/customers' },
+		{ label: 'Notendur', key: 'users', href: '/users' },
+		{ label: 'Áríðaðandi', key: 'upcoming', href: '/upcoming' },
 	];
 	res.locals.user = req.user;
 	next();
@@ -65,88 +65,48 @@ exports.requireUser = function (req, res, next) {
 	}
 };
 
-
-/**
- * Returns a list of all jobs that should be worked on within 2 weeks from
- * now, and have not been finished for this period.
- */
-exports.getUpcoming = function(req,res,next){
-	req.jobs = [];
-	Job.model.find().exec(function(err,jobs){
-			Object.keys(jobs).forEach(function(key) {
-				//if(moment().subtract(2,'week').isAfter(moment(jobs[key].createdAt).add(jobs[key].period,'month'))){
-					if(!jobs[key].done && !jobs[key].doneNow){
-						jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
-						req.jobs.push(jobs[key]);
-					}
-				//}
-			});
-			next();
-	});
-}
-
-exports.setCustomers = function(req,res,next){
-	customerIds = [];
-	req.jobs.forEach(function(job){
-		customerIds.push(job.customer);
-	})
-	Customer.model.find({
-		'_id': { $in: customerIds}
-	}, function(err, customers){
-		for(var i=0; i<req.jobs.length; i++){
-			for(var j=0; j<customers.length; j++){
-				if(req.jobs[i].customer.toString() == customers[j]._id.toString()){
-					req.jobs[i].customerObject = customers[j];
-				}
-			}
-		}
-		next();
-	});
-}
-
 /**
  * Middleware for the index
  */
-exports.getFormsByUser = function(req,res,next){
-	Form.model.find({user:req.user._id})
-	.populate({
-		path:'job',
-		model:'Job',
-		populate:{
-			path:'customer',
-			model:'Customer'
-		}
-	})
-	.exec(function(err,forms){
-		Object.keys(forms).forEach(function(key) {
-			forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
+exports.getFormsByUser = function (req, res, next) {
+	Form.model.find({ user: req.user._id })
+		.populate({
+			path: 'job',
+			model: 'Job',
+			populate: {
+				path: 'customer',
+				model: 'Customer'
+			}
+		})
+		.exec(function (err, forms) {
+			Object.keys(forms).forEach(function (key) {
+				forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
+			});
+			req.forms = forms;
+			next();
 		});
-		req.forms = forms;
-		next();
-	});
 }
 
-exports.getJobsByUser = function(req,res,next){
-	Job.model.find({user:req.user._id})
-	.populate('user')
-	.populate('customer')
-	.exec(function(err,jobs){
-		console.log(req.user._id);
-		Object.keys(jobs).forEach(function(key) {
-			jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
+exports.getJobsByUser = function (req, res, next) {
+	Job.model.find({ user: req.user._id })
+		.populate('user')
+		.populate('customer')
+		.exec(function (err, jobs) {
+			Object.keys(jobs).forEach(function (key) {
+				jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
+			});
+			req.jobs = jobs;
+			next();
 		});
-		req.jobs = jobs;
-		next();
-	});
 }
 
 /**
  * Middleware for selecting in bulk,
  * consider pagination here later
  */
-exports.getAllJobs = function(req,res,next){
-	Job.model.find().populate('customer').exec(function(err,jobs){
-		Object.keys(jobs).forEach(function(key) {
+exports.getAllJobs = function (req, res, next) {
+	Job.model.find().populate('customer').exec(function (err, jobs) {
+		Object.keys(jobs).forEach(function (key) {
 			jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
 		});
 		req.jobs = jobs;
@@ -154,9 +114,9 @@ exports.getAllJobs = function(req,res,next){
 	});
 }
 
-exports.getAllUsers = function(req,res,next){
-	User.model.find().exec(function(err,users){
-		Object.keys(users).forEach(function(key) {
+exports.getAllUsers = function (req, res, next) {
+	User.model.find().exec(function (err, users) {
+		Object.keys(users).forEach(function (key) {
 			users[key].prettyDate = moment(users[key].createdAt).format("MMM Do YY");
 		});
 		req.users = users;
@@ -164,9 +124,9 @@ exports.getAllUsers = function(req,res,next){
 	});
 }
 
-exports.getAllCustomers = function(req,res,next){
-	Customer.model.find().exec(function(err,customers){
-		Object.keys(customers).forEach(function(key) {
+exports.getAllCustomers = function (req, res, next) {
+	Customer.model.find().exec(function (err, customers) {
+		Object.keys(customers).forEach(function (key) {
 			customers[key].prettyDate = moment(customers[key].createdAt).format("MMM Do YY");
 		});
 		req.customers = customers;
@@ -174,54 +134,65 @@ exports.getAllCustomers = function(req,res,next){
 	});
 }
 
-exports.getAllForms = function(req,res,next){
+exports.getAllForms = function (req, res, next) {
 	Form.model.find()
-			.populate({
-				path:'job',
-				model:'Job',
-				populate:{
-					path:'customer',
-					model:'Customer'
-				}
-			})
-			.populate('user')
-			.exec(function(err,forms){
-				Object.keys(forms).forEach(function(key) {
+		.populate({
+			path: 'job',
+			model: 'Job',
+			populate: {
+				path: 'customer',
+				model: 'Customer'
+			}
+		})
+		.populate('user')
+		.exec(function (err, forms) {
+			Object.keys(forms).forEach(function (key) {
 				forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
-				});
-				req.forms = forms;
-				next();
 			});
+			req.forms = forms;
+			next();
+		});
 }
 
 /**
  * Middleware for endpoints
  */
 
-exports.getJobById = function(req,res,next){
-	Job.model.findOne({_id:req.params.jobId})
+exports.getJobById = function (req, res, next) {
+	Job.model.findOne({ _id: req.params.jobId })
 		.populate('user')
 		.populate('customer')
-		.exec(function(err,job){
+		.exec(function (err, job) {
 			job.prettyDate = moment(job.createdAt).format("MMM Do YY");
 			req.job = job;
 			next();
 		});
 }
-exports.getUserById = function(req,res,next){
-	User.model.findById(req.params.userId, function(err,user){
+exports.getUserById = function (req, res, next) {
+	User.model.findById(req.params.userId, function (err, user) {
 		req.user = user;
 		next();
 	});
 }
-exports.getFormById = function(req,res,next){
-	Form.model.findById(req.params.formId, function(err,form){
-		req.form = form;
-		next();
-	});
+exports.getFormById = function (req, res, next) {
+	Form.model.findOne({_id:req.params.formId})
+		.populate({
+			path: 'job',
+			model: 'Job',
+			populate: {
+				path: 'customer',
+				model: 'Customer'
+			}
+		})
+		.populate('user')
+		.exec(function (err, form) {
+			req.form = form;
+			form.formDate = moment(form.createdAt).format("YYYY-MM-DD");
+			next();
+		});
 }
-exports.getCustomerById = function(req,res,next){
-	Customer.model.findById(req.params.customerId, function(err,customer){
+exports.getCustomerById = function (req, res, next) {
+	Customer.model.findById(req.params.customerId, function (err, customer) {
 		req.customer = customer;
 		next();
 	});
@@ -231,24 +202,70 @@ exports.getCustomerById = function(req,res,next){
  * Endpoint specific middleware
  */
 
- exports.getFormsByJobId = function(req,res,next){
-	 Form.model.find({job:req.params.jobId})
-			.populate({
-				path:'job',
-				model:'Job',
-				populate:{
-					path:'customer',
-					model:'Customer'
-				}
-			})
-			.populate('user')
-			.exec(function(err,forms){
-				Object.keys(forms).forEach(function(key) {
-					forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
-				});
-				req.forms = forms;
-				next();
+exports.getFormsByJobId = function (req, res, next) {
+	Form.model.find({ job: req.params.jobId })
+		.populate({
+			path: 'job',
+			model: 'Job',
+			populate: {
+				path: 'customer',
+				model: 'Customer'
+			}
+		})
+		.populate('user')
+		.exec(function (err, forms) {
+			Object.keys(forms).forEach(function (key) {
+				forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
 			});
- }
+			req.forms = forms;
+			next();
+		});
+}
+
+/**
+ * For fetching all upcoming jobs
+ */
+exports.getUpcomingJobs = function (req, res, next) {
+	Job.model.find()
+		.populate('user')
+		.populate('customer')
+		.exec(function (err, jobs) {
+			upcoming = [];
+			Object.keys(jobs).forEach(function (key) {
+				if (moment(jobs[key].createdAt).add(jobs[key].period, 'months').isAfter(moment().subtract(req.user.warningDays, 'days'))) {
+					if (moment(jobs[key].createdAt).add(jobs[key].period, 'months').isBefore(moment().add(req.user.warningDays, 'days'))) {
+						jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
+						jobs[key].deadline = moment(jobs[key].createdAt).add(jobs[key].period,'months').format("MMM Do YY");
+						upcoming.push(jobs[key]);
+					}
+				}
+			});
+			req.upcoming = upcoming;
+			next();
+		});
+}
+
+/**
+ * Check if there is an upcoming job
+ */
+exports.getUpcomingJobs = function (req, res, next) {
+	Job.model.find()
+		.populate('user')
+		.populate('customer')
+		.exec(function (err, jobs) {
+			upcoming = [];
+			Object.keys(jobs).forEach(function (key) {
+				if (moment(jobs[key].createdAt).add(jobs[key].period, 'months').isAfter(moment().subtract(req.user.warningDays, 'days'))) {
+					if (moment(jobs[key].createdAt).add(jobs[key].period, 'months').isBefore(moment().add(req.user.warningDays, 'days'))) {
+						jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
+						jobs[key].deadline = moment(jobs[key].createdAt).add(jobs[key].period,'months').format("MMM Do YY");
+						upcoming.push(jobs[key]);
+					}
+				}
+			});
+			req.upcoming = upcoming;
+			next();
+		});
+}
 
 

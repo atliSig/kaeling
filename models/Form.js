@@ -12,12 +12,32 @@ var Form = new keystone.List('Form',{
 });
 
 Form.add({
-    name: { type: String, required: true, initial:true, default:'Ný skýrsla'},
-    user: {type: Types.Relationship, ref:'User', label:'Starfsmaður', initial:true},
-    job: {type: Types.Relationship, ref:'Job', label:'yfirverk', initial:true},
-    date: {type: Date, default:Date.now},
-    systemName: {type: String, required:false, label:'Heiti kerfis'},
-    diary: {type:Types.Textarea, required:false, label:'Dagbók'}
+    name: { 
+        type: String, 
+        required: true, 
+        initial:true, 
+        default:'Ný skýrsla'},
+    user: {
+        type: Types.Relationship, 
+        ref:'User',
+        label:'Starfsmaður',
+        initial:true},
+    job: {
+        type: Types.Relationship,
+        ref:'Job',
+        label:'yfirverk',
+        initial:true},
+    createdAt: {
+        type: Date,
+        default:Date.now},
+    systemName: {
+        type: String,
+        required:false,
+        label:'Heiti kerfis'},
+    diary: {
+        type:Types.Textarea, 
+        required:false, 
+        label:'Dagbók'}
     /*q1: {
         whichType: {type: String, label: 'Tegund'},
         isOk: {type: Types.Boolean, label:'Í lagi'},

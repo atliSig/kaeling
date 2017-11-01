@@ -39,14 +39,10 @@ exports = module.exports = function (app) {
 	 * General routes
 	 */
 	app.get('/',
+		mw.getUpcomingJobs,
 		mw.getFormsByUser,
 		mw.getJobsByUser,
 		routes.views.index);
-	// Upcoming jobs
-	app.get('/upcoming',
-		mw.getUpcoming,
-		mw.setCustomers,
-		routes.views.upcoming);
 	/**
 	 * Overview routes
 	 */	
@@ -72,11 +68,19 @@ exports = module.exports = function (app) {
 		routes.views.endpoint.job);
 	app.get('/forms/:formId',
 		mw.getFormById,
-		routes.views.endpoint.form);
+		mw.getAllUsers,
+		mw.getAllJobs,
+		routes.views.endpoint.form.get);
 	app.get('/customers/:customerId',
 		mw.getCustomerById,
 		routes.views.endpoint.customer);
 	app.get('/users/:userId',
 		mw.getUserById,
 		routes.views.endpoint.user);
+
+	/**
+	 * Post routes
+	 */
+	app.post('/forms/:formId',
+		routes.views.endpoint.form.post);
 };

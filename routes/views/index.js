@@ -29,14 +29,24 @@ exports = module.exports = function (req, res) {
 			'customer':req.jobs[key].customer.name,
 			'date':req.jobs[key].prettyDate});
 	});
-	console.log(req.jobs);
-
+	upcomingSelected =[];
+	Object.keys(req.upcoming).forEach(function(key) {
+		upcomingSelected.push({
+			'link':req.upcoming[key]._id,
+			'name':req.upcoming[key].name,
+			'customer':req.upcoming[key].customer.name,
+			'date':req.upcoming[key].prettyDate,
+			'deadline':req.upcoming[key].deadline});
+	});
 	view.render('index', {
 		jobs: req.jobs,
 		forms: req.forms,
+		upcoming: req.upcoming,
 		jobTitles:['Nafn','Viðskiptavinur','Fært inn'],
 		formTitles:['Nafn','Viðskiptavinur','Yfirverk','Fært inn'],
+		upcomingTitles:['Nafn','Viðskiptavinur','Fært inn','Tímamörk'],
 		jobSelected:jobSelected,
-		formSelected,formSelected
+		formSelected:formSelected,
+		upcomingSelected:upcomingSelected
 	});
 };
