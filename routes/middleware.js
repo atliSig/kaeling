@@ -284,14 +284,6 @@ exports.getUpcomingJobs = function (req, res, next) {
  * Update middleware
  */
 
-exports.updateForm = function(req,res,next){
-	Form.model.findById(req.params.formId).exec(function(err,form){
-		form.getUpdateHandler(req).process(req.body,function(err){
-			next();
-		})
-	});
-}
-
 exports.updateJob = function(req,res,next){
 	Job.model.findById(req.params.jobId).exec(function(err,job){
 		job.getUpdateHandler(req).process(req.body,function(err){
@@ -311,6 +303,16 @@ exports.updateCustomer = function(req,res,next){
 exports.updateUser = function(req,res,next){
 	User.model.findById(req.params.userId).exec(function(err,user){
 		user.getUpdateHandler(req).process(req.body,function(err){
+			next();
+		})
+	});
+}
+
+exports.updateForm = function(req,res,next){
+	req.body.checks = JSON.parse(req.body.attributes);
+	console.log(req.body);
+	Form.model.findById(req.params.formId).exec(function(err,form){
+		form.getUpdateHandler(req).process(req.body,function(err){
 			next();
 		})
 	});

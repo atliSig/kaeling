@@ -1,4 +1,4 @@
-extends ../layouts/default
+extends ../../layouts/default
 
 block content
 
@@ -8,7 +8,7 @@ block content
 				form(method='post')
 					.form-group
 						label(for='name') Nafn
-						input(name='name')#name.form-control(type='text', placeholder='Nýtt nafn' value=form.name)
+						input#name.form-control(name='name' type='text', placeholder='Nýtt nafn' value=form.name)
 					.form-group.row
 						.col-6
 							label(for='user') Starfsmaður
@@ -27,8 +27,8 @@ block content
 									else
 										option(value=job._id)=job.name
 					.form-group
-						label(for='date') Dagsetning
-						input(name='date')#date.form-control(type='date', value=form.formDate)
+						label Dagsetning
+						input.form-control(name='date', type='date', value=form.formDate)
 					.form-group.row
 						.col-12
 							p
@@ -36,6 +36,8 @@ block content
 									| Sýna nánar
 							#attributes.collapse
 								.card.card-block.attribute-card
+									input#nAttributes(type='hidden', name='nAttributes', value=count)
+									input#attributes(type='hidden',name='attributes')
 									.row
 										each val,idx in attributes
 											.col-md-6.col-12.attribute-column
@@ -46,18 +48,18 @@ block content
 														.col-md-9.col-12
 															.form-check.form-check-inline.float-right
 																label.custom-control.custom-checkbox.form-check-label
-																	input.custom-control-input.form-check-input(type='checkbox' value=val.isOk)
+																	input.custom-control-input.form-check-input.isOk(type='checkbox' checked=val.isOk data-key=idx)
 																	span.custom-control-indicator
 																	span.custom-control-description Í lagi
 															.form-check.form-check-inline.float-right
 																label.custom-control.custom-checkbox.form-check-label
-																	input.custom-control-input.form-check-input(type='checkbox' value=val.isFixed)
+																	input.custom-control-input.form-check-input.isFixed(type='checkbox' checked=val.isFixed data-key=idx)
 																	span.custom-control-indicator
 																	span.custom-control-description Viðgert
 														.col-md-9.col-12
-															textarea.form-control(rows='1', placeholder='Athugasemd...' value=val.comment)
+															textarea.form-control.comment(rows='1', placeholder='Athugasemd...', data-key=idx)=val.comment
 					.form-group
 						label(for='diary') Dagbók
 						textarea(name='diary', rows='3')#diary.form-control=form.diary
-					button.btn.btn-primary.float-right(type='submit') Breyta
+					button.btn.btn-primary.float-right#change-form(type='submit') Breyta
 
