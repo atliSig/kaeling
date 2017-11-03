@@ -31,7 +31,6 @@ exports.initLocals = function (req, res, next) {
 		{ label: 'Skýrslur', key: 'forms', href: '/forms' },
 		{ label: 'Fyrirtæki', key: 'customers', href: '/customers' },
 		{ label: 'Notendur', key: 'users', href: '/users' },
-		{ label: 'Áríðaðandi', key: 'upcoming', href: '/upcoming' },
 	];
 	res.locals.user = req.user;
 	next();
@@ -82,7 +81,7 @@ exports.getFormsByCurrentUser = function (req, res, next) {
 			Object.keys(forms).forEach(function (key) {
 				forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
 			});
-			req.forms = forms;
+			req.currentUserForms = forms;
 			next();
 		});
 }
@@ -95,7 +94,7 @@ exports.getJobsByCurrentUser = function (req, res, next) {
 			Object.keys(jobs).forEach(function (key) {
 				jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
 			});
-			req.jobs = jobs;
+			req.currentUserJobs = jobs;
 			next();
 		});
 }
@@ -109,7 +108,7 @@ exports.getAllJobs = function (req, res, next) {
 		Object.keys(jobs).forEach(function (key) {
 			jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
 		});
-		req.jobs = jobs;
+		req.session.allJobs = jobs;
 		next();
 	});
 }
@@ -118,8 +117,10 @@ exports.getAllUsers = function (req, res, next) {
 	User.model.find().exec(function (err, users) {
 		Object.keys(users).forEach(function (key) {
 			users[key].prettyDate = moment(users[key].createdAt).format("MMM Do YY");
+			console.log('hallo');
 		});
-		req.users = users;
+		console.log('lol');
+		req.session.allUsers = users;
 		next();
 	});
 }
@@ -129,7 +130,8 @@ exports.getAllCustomers = function (req, res, next) {
 		Object.keys(customers).forEach(function (key) {
 			customers[key].prettyDate = moment(customers[key].createdAt).format("MMM Do YY");
 		});
-		req.customers = customers;
+		console.log(customers);
+		req.session.allCustomers = customers;
 		next();
 	});
 }
@@ -149,7 +151,7 @@ exports.getAllForms = function (req, res, next) {
 			Object.keys(forms).forEach(function (key) {
 				forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
 			});
-			req.forms = forms;
+			req.allForms = forms;
 			next();
 		});
 }
@@ -164,13 +166,13 @@ exports.getJobById = function (req, res, next) {
 		.populate('customer')
 		.exec(function (err, job) {
 			job.prettyDate = moment(job.createdAt).format("MMM Do YY");
-			req.job = job;
+			req.jobById = job;
 			next();
 		});
 }
 exports.getUserById = function (req, res, next) {
 	User.model.findById(req.params.userId, function (err, user) {
-		req.user = user;
+		req.userById = user;
 		next();
 	});
 }
@@ -186,8 +188,9 @@ exports.getFormById = function (req, res, next) {
 		})
 		.populate('user')
 		.exec(function (err, form) {
-			req.form = form;
+			console.log(form);
 			form.formDate = moment(form.createdAt).format("YYYY-MM-DD");
+			req.formById = form;
 			next();
 		});
 }
@@ -196,7 +199,7 @@ exports.getCustomerById = function (req, res, next) {
 		.findOne({_id:req.params.customerId})
 		.populate('user')
 		.exec(function (err, customer) {
-		req.customer = customer;
+		req.customerById = customer;
 		next();
 	});
 }
@@ -220,7 +223,7 @@ exports.getFormsByJobId = function (req, res, next) {
 			Object.keys(forms).forEach(function (key) {
 				forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
 			});
-			req.forms = forms;
+			req.formsByJob = forms;
 			next();
 		});
 }
@@ -239,7 +242,7 @@ exports.getFormsByUserId = function (req, res, next) {
 			Object.keys(forms).forEach(function (key) {
 				forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
 			});
-			req.forms = forms;
+			req.formsByUser = forms;
 			next();
 		});
 }
@@ -252,7 +255,7 @@ exports.getJobsByCustomerId = function(req,res,next){
 			Object.keys(jobs).forEach(function (key) {
 				jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
 			});
-			req.jobs = jobs;
+			req.jobsByCustomer = jobs;
 			next();
 		});
 }
@@ -275,7 +278,7 @@ exports.getUpcomingJobs = function (req, res, next) {
 					}
 				}
 			});
-			req.upcoming = upcoming;
+			req.upcomingJobs = upcoming;
 			next();
 		});
 }
@@ -316,4 +319,35 @@ exports.updateForm = function(req,res,next){
 			next();
 		})
 	});
+}
+
+/**
+ * Create middleware
+ */
+
+ exports.createForm = function(req,res,next){
+	var newForm = new Form.model(req.body);
+	newForm.save(function(err){
+		req.formId = newForm._id;
+		next();
+	});
+ }
+
+ exports.createJob = function(req,res,next){
+	var newJob = new Job.model(req.body);
+	newJob.save(function(err){
+		req.jobId = newJob._id;
+		next();
+	});
+ }
+
+/**
+ * Session related
+ */
+exports.setSession = function(req,res,next){
+	if(!req.session.allUsers || !req.session.allUsers || !req.session.allUsers){
+		res.redirect('/update');
+	} else{
+		next();
+	}
 }

@@ -5,48 +5,56 @@
 var keystone = require('keystone');
 var Form = keystone.list('Form');
 
-exports = module.exports = function (req, res) {
+module.exports.get = function (req, res) {
 
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
 
 	locals.section = 'home';
 	formSelected = [];
-	Object.keys(req.forms).forEach(function(key) {
+	Object.keys(req.currentUserForms).forEach(function(key) {
 		formSelected.push({
-			'link':req.forms[key]._id,
-			'name':req.forms[key].name,
-			'customer':req.forms[key].job.customer.name,
-			'job': req.forms[key].job.name,
-			'date':req.forms[key].prettyDate,
+			'link':req.currentUserForms[key]._id,
+			'name':req.currentUserForms[key].name,
+			'customer':req.currentUserForms[key].job.customer.name,
+			'job': req.currentUserForms[key].job.name,
+			'date':req.currentUserForms[key].prettyDate,
 			});
 	});
 	jobSelected = [];
-	Object.keys(req.jobs).forEach(function(key) {
+	Object.keys(req.currentUserJobs).forEach(function(key) {
 		jobSelected.push({
-			'link':req.jobs[key]._id,
-			'name':req.jobs[key].name,
-			'customer':req.jobs[key].customer.name,
-			'date':req.jobs[key].prettyDate});
+			'link':req.currentUserJobs[key]._id,
+			'name':req.currentUserJobs[key].name,
+			'customer':req.currentUserJobs[key].customer.name,
+			'date':req.currentUserJobs[key].prettyDate});
 	});
 	upcomingSelected =[];
-	Object.keys(req.upcoming).forEach(function(key) {
+	Object.keys(req.upcomingJobs).forEach(function(key) {
 		upcomingSelected.push({
-			'link':req.upcoming[key]._id,
-			'name':req.upcoming[key].name,
-			'customer':req.upcoming[key].customer.name,
-			'date':req.upcoming[key].prettyDate,
-			'deadline':req.upcoming[key].deadline});
+			'link':req.upcomingJobs[key]._id,
+			'name':req.upcomingJobs[key].name,
+			'customer':req.upcomingJobs[key].customer.name,
+			'date':req.upcomingJobs[key].prettyDate,
+			'deadline':req.upcomingJobs[key].deadline});
 	});
 	view.render('index', {
-		jobs: req.jobs,
-		forms: req.forms,
-		upcoming: req.upcoming,
+		currentUser: req.user,
+		currentUserjobs: req.currentUserJobs,
+		currentUserforms: req.currentUserForms,
+		upcomingJobs: req.upcomingJobs,
 		jobTitles:['Nafn','Viðskiptavinur','Fært inn'],
 		formTitles:['Nafn','Viðskiptavinur','Yfirverk','Fært inn'],
 		upcomingTitles:['Nafn','Viðskiptavinur','Fært inn','Tímamörk'],
 		jobSelected:jobSelected,
 		formSelected:formSelected,
-		upcomingSelected:upcomingSelected
+		upcomingSelected:upcomingSelected,
+		users:req.session.allUsers,
+		customers:req.session.allCustomers,
+		jobs:req.session.allJobs
 	});
 };
+
+module.exports.redirect = function(req,res,next){
+	res.redirect('/');
+}

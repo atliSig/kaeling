@@ -12,19 +12,23 @@ exports = module.exports = function (req, res) {
 	locals.section = 'forms';
 	
 	selected = [];
-	Object.keys(req.forms).forEach(function(key) {
+	Object.keys(req.allForms).forEach(function(key) {
 		selected.push({
-			'link':req.forms[key]._id,
-			'name':req.forms[key].name,
-			'customer':req.forms[key].job.customer.name,
-			'user':req.forms[key].user.name,
-			'job': req.forms[key].job.name,
-			'date':req.forms[key].prettyDate,
+			'link':req.allForms[key]._id,
+			'name':req.allForms[key].name,
+			'customer':req.allForms[key].job.customer.name,
+			'user':req.allForms[key].user.name,
+			'job': req.allForms[key].job.name,
+			'date':req.allForms[key].prettyDate,
 			});
 	});
 
 	view.render('overview', {
+		currentUser: req.user,
 		type:'forms',
 		selected: selected,
-		titles:['nafn','Viðskiptavinur','Starfsmaður','Yfirverk','Dagsetning']});
+		titles:['nafn','Viðskiptavinur','Starfsmaður','Yfirverk','Dagsetning'],
+		users:req.session.allUsers,
+		customers:req.session.allCustomers,
+		jobs:req.session.allJobs});
 };

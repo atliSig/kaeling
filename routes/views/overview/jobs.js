@@ -15,17 +15,20 @@ exports = module.exports = function (req, res) {
 	locals.section = 'jobs';
 
 	selected = [];
-	Object.keys(req.jobs).forEach(function(key) {
+	Object.keys(req.session.allJobs).forEach(function(key) {
 		selected.push({
-			'link':req.jobs[key]._id,
-			'name':req.jobs[key].name,
-			'customer':req.jobs[key].customer.name,
-			'date':req.jobs[key].prettyDate});
+			'link':req.session.allJobs[key]._id,
+			'name':req.session.allJobs[key].name,
+			'customer':req.session.allJobs[key].customer.name,
+			'date':req.session.allJobs[key].prettyDate});
 	});
 
 	view.render('overview', {
+		currentUser: req.user,
 		type:'jobs',
-		data: req.jobs,
 		selected: selected,
-		titles:['Nafn','Viðskiptavinur','Fært inn']});
+		titles:['Nafn','Viðskiptavinur','Fært inn'],
+		users:req.session.allUsers,
+		customers:req.session.allCustomers,
+		jobs:req.session.allJobs});
 };

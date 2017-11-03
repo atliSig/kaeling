@@ -10,29 +10,37 @@ module.exports.get = function (req, res) {
 	var locals = res.locals;
 
 	selected = [];
-	Object.keys(req.forms).forEach(function(key) {
+	Object.keys(req.formsByUser).forEach(function(key) {
 		selected.push({
-			'link':req.forms[key]._id,
-			'name':req.forms[key].name,
-			'customer':req.forms[key].job.customer.name,
-			'job': req.forms[key].job.name,
-			'date':req.forms[key].prettyDate,
+			'link':req.formsByUser[key]._id,
+			'name':req.formsByUser[key].name,
+			'customer':req.formsByUser[key].job.customer.name,
+			'job': req.formsByUser[key].job.name,
+			'date':req.formsByUser[key].prettyDate,
 			});
 	});
 
 	view.render('user', {
-		user: req.user,
-		count: req.forms.length,
+		currentUser: req.user,
+		user: req.userById,
+		count: req.formsByUser.length,
 		type:'forms',
 		selected: selected,
-		titles:['nafn','Viðskiptavinur','Yfirverk','Dagsetning']});
+		titles:['nafn','Viðskiptavinur','Yfirverk','Dagsetning'],
+		users:req.session.allUsers,
+		customers:req.session.allCustomers,
+		jobs:req.session.allJobs});
 };
 
 module.exports.edit = function(req,res){
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
 	view.render('edit/editUser', {
-		user:req.user
+		currentUser: req.user,
+		user:req.userById,
+		users:req.session.allUsers,
+		customers:req.session.allCustomers,
+		jobs:req.session.allJobs
 	});
 }
 

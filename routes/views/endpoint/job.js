@@ -8,20 +8,24 @@ module.exports.get = function (req, res) {
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
 	selected = [];
-	Object.keys(req.forms).forEach(function(key) {
+	Object.keys(req.formsByJob).forEach(function(key) {
 		selected.push({
-			'link':req.forms[key]._id,
-			'name':req.forms[key].name,
-			'user':req.forms[key].user.name,
-			'date':req.forms[key].prettyDate,
+			'link':req.formsByJob[key]._id,
+			'name':req.formsByJob[key].name,
+			'user':req.formsByJob[key].user.name,
+			'date':req.formsByJob[key].prettyDate,
 			});
 	});
+	console.log(req.jobById._id.toString());
 	view.render('job', {
+		currentUser: req.user,
 		type: 'forms',
-		job: req.job, 
-		forms: req.forms,
+		job: req.jobById, 
 		selected: selected,
-		titles:['Nafn','Starfsmaður','Dagsetning']}
+		titles:['Nafn','Starfsmaður','Dagsetning'],
+		users:req.session.allUsers,
+		customers:req.session.allCustomers,
+		jobs:req.session.allJobs}
 	);
 };
 
@@ -29,9 +33,15 @@ module.exports.edit = function(req,res){
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
 	view.render('edit/editjob', {
-		job: req.job, 
-		users:req.users,
-		customers:req.customers});
+		currentUser: req.user,
+		job: req.jobById, 
+		users:req.session.allUsers,
+		customers:req.session.allCustomers,
+		jobs:req.session.allJobs});
+}
+
+module.exports.create = function(req,res){
+	res.redirect('/jobs/'+req.jobId);
 }
 
 exports = module.exports;

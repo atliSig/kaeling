@@ -13,7 +13,7 @@ block content
 							label(for='user') Eigandi verks
 							select(name='user')#user.form-control
 								each user in users
-									if user._id.equals(job.user._id)
+									if user._id == job.user._id
 										option(value=user._id selected=true)=user.name
 									else
 										option(value=user._id)=user.name

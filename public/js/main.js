@@ -19,3 +19,7 @@ $('#change-form').click(function(){
 	});
 	$('input[name=attributes]').val(JSON.stringify(attributes));
 });
+
+$('#new-job').click(function(){
+	$('#job-modal').modal('toggle');
+})

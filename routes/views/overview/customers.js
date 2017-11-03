@@ -10,17 +10,20 @@ exports = module.exports = function (req, res) {
 	var locals = res.locals;
 
 	selected = [];
-	Object.keys(req.customers).forEach(function(key) {
+	Object.keys(req.session.allCustomers).forEach(function(key) {
 		selected.push({
-			'link':req.customers[key]._id,
-			'name':req.customers[key].name,
-			'location':req.customers[key].location.street1+', '+req.customers[key].location.suburb,
-			'date':req.customers[key].prettyDate});
+			'link':req.session.allCustomers[key]._id,
+			'name':req.session.allCustomers[key].name,
+			'location':req.session.allCustomers[key].location.street1+', '+req.session.allCustomers[key].location.suburb,
+			'date':req.session.allCustomers[key].prettyDate});
 	});
 	locals.section = 'customers';
 	view.render('overview', {
+		currentUser: req.user,
 		type:'customers',
-		data: req.customers,
 		selected:selected,
-		titles:['Fyrirtæki','Staður','Fært inn']});
+		titles:['Fyrirtæki','Staður','Fært inn'],
+		users:req.session.allUsers,
+		customers:req.session.allCustomers,
+		jobs:req.session.allJobs});
 };

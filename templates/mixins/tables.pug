@@ -3,11 +3,25 @@ mixin overview-table(type,titles,selected)
 		table.table.table-hover
 			thead
 				tr
+					- var n = 1
 					each title in titles
-						th(scope='col')=title
+						if n == 2
+							th(scope='col').column-hd-md=title
+						else if n > 3
+							th(scope='col').column-hd-sm=title
+						else
+							th(scope='col')=title
+						- n++
 			tbody
 				each s in selected
 					tr.clickable(data-href=s.link, data-type=type)
+						- var n = 0
 						each val, i in s
 							if i !=='link'
-								td=val
+								if n == 2
+									td.column-hd-md=val
+								else if n > 3
+									td.column-hd-sm=val
+								else
+									td=val
+							- n++

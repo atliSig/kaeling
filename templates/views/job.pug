@@ -29,4 +29,15 @@ block content
 					.col-12
 							a.btn.btn-primary.float-right(href='edit/') Breyta verkefni
 			.col-xl-9.col-md-7.col-12.table-column
-				+overview-table(type,titles,selected)
+				if selected.length!=0
+					+overview-table(type,titles,selected)
+				else
+					.container-fluid.d-flex.justify-content-center.align-items-center.empty
+						.row
+							.col-md-10.offset-md-1
+								.card
+									.card-block
+										h4.card-title Engar skýrslur
+										p.card-text Það hafa ekki verið gerðar neinar skýrslur fyrir þetta verkefni.
+										p.card-text Viltu búa til nýja skýrslu fyrir þetta verkefni?
+										button.btn.btn-primary.float-right(role='button') Ný skýrsla

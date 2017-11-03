@@ -14,7 +14,7 @@ block content
 							label(for='user') Starfsmaður
 							select(name='user')#user.form-control
 								each user in users
-									if user._id.equals(form.user._id)
+									if user._id==form.user._id
 										option(value=user._id selected=true)=user.name
 									else
 										option(value=user._id)=user.name
@@ -22,7 +22,7 @@ block content
 							label(for='job') Verkefni
 							select(name='job')#job.form-control
 								each job in jobs
-									if job._id.equals(form.job._id)
+									if job._id==form.job._id
 										option(value=job._id selected=true)=job.name
 									else
 										option(value=job._id)=job.name

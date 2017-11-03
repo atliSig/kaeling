@@ -7,7 +7,7 @@ var Form = keystone.list('Form');
 module.exports.edit = function (req, res) {
 	var view = new keystone.View(req, res);
 	var locals = res.locals
-	var checks = req.form.checks;
+	var checks = req.formById.checks;
 	var attributes = {};
 	Object.keys(checks).forEach(function(key) {
 		if(typeof checks[key] === 'object' && 'isAttribute' in checks[key]){
@@ -15,11 +15,17 @@ module.exports.edit = function (req, res) {
 		}
 	});
 	view.render('edit/editform', {
+		currentUser: req.user,
 		count: Object.keys(attributes).length,
-		form: req.form,
-		users:req.users,
-		jobs:req.jobs,
-		attributes:attributes});
+		form: req.formById,
+		attributes:attributes,
+		users:req.session.allUsers,
+		customers:req.session.allCustomers,
+		jobs:req.session.allJobs});
 };
+
+module.exports.create = function(req,res){
+	res.redirect('/forms/'+req.formId+'/edit');
+}
 
 exports = module.exports;
