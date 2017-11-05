@@ -10,7 +10,7 @@ var keystone = require('keystone');
 // and documentation.
 
 keystone.init({
-	'name': 'kaeling',
+	'name': 'Kaeling',
 	'brand': 'Kæling',
 
 	'less': 'public',

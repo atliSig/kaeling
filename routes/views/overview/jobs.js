@@ -9,8 +9,10 @@ exports = module.exports = function (req, res) {
 
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
-
 	locals.section = 'jobs';
+	helpTitle = 'Yfirlitssíða verkefna';
+	helpBody =
+		'Hér er hægt að nálgast öll verkefni sem eru skráð í kerfinu';
 
 	selected = [];
 	Object.keys(req.session.allJobs).forEach(function(key) {
@@ -30,5 +32,8 @@ exports = module.exports = function (req, res) {
 		keys:[,'name','customer','date'],
 		users:req.session.allUsers,
 		customers:req.session.allCustomers,
-		jobs:req.session.allJobs});
+		jobs:req.session.allJobs,
+		helpBody:helpBody,
+		helpTitle:helpTitle
+	});
 };

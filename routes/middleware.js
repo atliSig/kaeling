@@ -30,8 +30,8 @@ exports.initLocals = function (req, res, next) {
 		{ label: 'Heim', key: 'home', href: '/' },
 		{ label: 'Verkefni', key: 'jobs', href: '/jobs' },
 		{ label: 'Skýrslur', key: 'forms', href: '/forms' },
-		{ label: 'Fyrirtæki', key: 'customers', href: '/customers' },
-		{ label: 'Notendur', key: 'users', href: '/users' },
+		{ label: 'Viðskiptavinir', key: 'customers', href: '/customers' },
+		{ label: 'Starfsmenn', key: 'users', href: '/users' },
 	];
 	res.locals.user = req.user;
 	next();
@@ -144,6 +144,16 @@ exports.getAllForms = function (req, res, next) {
 /**
  * Middleware for endpoints
  */
+
+exports.getJobsByUserId = function (req, res, next) {
+	Job.model.find({ user: req.params.userId })
+		.populate('user')
+		.populate('customer')
+		.exec(function (err, jobs) {
+			req.jobsByUser = jobs;
+			next();
+		});
+}
 
 exports.getJobById = function (req, res, next) {
 	Job.model.findOne({ _id: req.params.jobId })

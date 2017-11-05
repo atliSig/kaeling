@@ -10,7 +10,11 @@ module.exports.get = function (req, res) {
 
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
-
+	helpTitle = 'Forsíðan þín';
+	helpBody =
+		'Hér getur þú skoðað þau verkefni og skýrslur sem þú ert að vinna í.'+
+		' Ef það styttist í að það þurfi að gera skýrslu fyrir eitthvað ákveðið'+
+		' verkefni þá birtist verkefnið undir áríðandi verkefnum.';
 	locals.section = 'home';
 	formSelected = [];
 	Object.keys(req.currentUserForms).forEach(function(key) {
@@ -56,6 +60,8 @@ module.exports.get = function (req, res) {
 		upcomingSelected:upcomingSelected,
 		users:req.session.allUsers,
 		customers:req.session.allCustomers,
-		jobs:req.session.allJobs
+		jobs:req.session.allJobs,
+		helpBody:helpBody,
+		helpTitle:helpTitle
 	});
 };

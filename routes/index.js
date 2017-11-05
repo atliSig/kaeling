@@ -60,6 +60,7 @@ exports = module.exports = function (app) {
 		routes.views.endpoint.customer.get);
 	app.get('/users/:userId',
 		mw.getFormsByUserId,
+		mw.getJobsByUserId,
 		mw.getUserById,
 		routes.views.endpoint.user.get);
 

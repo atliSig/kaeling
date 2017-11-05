@@ -1,4 +1,14 @@
-mixin newform()
+mixin helpModal(title, textBody)
+	#help-modal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='help-modal', aria-hidden='true')
+		.modal-dialog(role='document')
+			.modal-content
+				.modal-header
+					h5.modal-title=title
+				.modal-body
+					p=textBody
+				.modal-footer
+					button.btn.btn-secondary(type='button', data-dismiss='modal') Loka
+mixin formModal()
 	#form-modal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='form-modal', aria-hidden='true')
 		form(method='post' action='/create/forms')
 			.modal-dialog(role='document')
@@ -41,7 +51,7 @@ mixin newform()
 						else
 							button.btn.btn-primary#new-job(type='button' data-dismiss='modal') Nýtt verkefni
 
-mixin newJob()
+mixin jobModal()
 	#job-modal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='job-modal', aria-hidden='true')
 		form(method='post' action='/create/jobs')
 			.modal-dialog(role='document')

@@ -8,7 +8,7 @@ html
 		meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
 		meta(http-equiv="X-UA-Compatible" content="IE=edge")
 
-		title= title || 'kæling'
+		title= title || 'Kæling'
 		link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
 
 		//- Customise the stylesheet for your site by editing /public/styles/site.less
@@ -42,6 +42,10 @@ html
 							li.nav-item(class=(section == link.key ? 'active' : null))
 								a.nav-link(href=link.href)= link.label
 						li.nav-item.hide-desktop
+							a.nav-link(data-toggle='modal', data-target='#help-modal' href="#") 
+								i.fa.fa-question-circle.button-icon
+								| Hjálp	
+						li.nav-item.hide-desktop
 							a.nav-link(href='keystone') Umsjónarkerfi
 						li.nav-item.hide-desktop
 							a.nav-link(href='keystone/signout') Skrá út
@@ -53,6 +57,8 @@ html
 					button.btn.btn-outline-secondary.navbar-button.right-button.hide-mobile(type='button', data-toggle='modal', data-target='#form-modal') 
 						i.fa.fa-plus.button-icon
 						| skýrsla
+					button.btn.btn-outline-secondary.navbar-button.right-button.hide-mobile(type='button', data-toggle='modal', data-target='#help-modal') 
+						i.fa.fa-question-circle
 				.row.mobile-brand-row
 					a.mobile-brand(href='/')
 						img(src="/images/flake-white.png", alt="Logo for Kæling", height="30px")
@@ -62,6 +68,7 @@ html
 					button.btn.btn-outline-secondary.navbar-button.right-button(type='button', data-toggle='modal', data-target='#form-modal') 
 						i.fa.fa-plus.button-icon
 						| skýrsla
+					
 		//- BODY
 		#body
 
@@ -75,8 +82,9 @@ html
 			//- Flash messages allow you to display once-off status messages to users, e.g. form
 			//- validation errors, success messages, etc.
 			//+info(message)
-			+newform()
-			+newJob()
+			+formModal()
+			+jobModal()
+			+helpModal(helpTitle, helpBody)
 			//- The content block should contain the body of your template's content
 			block content
 		//.card.info-card.lg-w-25

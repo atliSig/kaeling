@@ -18,4 +18,22 @@ block content
 					.col-12
 							a.btn.btn-primary.float-right(href='edit/') Breyta Notanda
 			.col-xl-9.col-md-7.col-12.table-column
-				+overview-table(type,titles,selected,keys)
+				.container-fluid
+					.row
+						.col-12.col-no-padding
+							ul.nav.nav-tabs.nav-fill(role='tablist')
+								li.nav-item
+									a.nav-link.active(href='#forms' data-toggle="tab" role="tab" ) Skýrslur
+								li.nav-item
+									a.nav-link(href='#jobs' data-toggle="tab" role="tab") Verk
+					.row
+						.col-12
+							.tab-content
+								.tab-pane.active#forms(role='tabpanel')
+									.row
+										.col-12.col-no-padding
+											+overview-table('forms',formTitles,formSelected,formKeys)
+								.tab-pane#jobs(role='tabpanel')
+									.row
+										.col-12.col-no-padding
+											+overview-table('jobs',jobTitles,jobSelected,jobKeys)

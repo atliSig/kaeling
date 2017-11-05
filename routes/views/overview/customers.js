@@ -8,7 +8,10 @@ exports = module.exports = function (req, res) {
 
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
-
+	locals.section = 'customers';	
+	helpTitle = 'Yfirlitssíða viðskiptavina';
+	helpBody =
+		'Hér er hægt að nálgast alla viðskiptavini sem eru skráðir í kerfinu';
 	selected = [];
 	Object.keys(req.session.allCustomers).forEach(function(key) {
 		selected.push({
@@ -17,7 +20,6 @@ exports = module.exports = function (req, res) {
 			'location':req.session.allCustomers[key].location.street1+', '+req.session.allCustomers[key].location.suburb,
 			'date':moment(req.session.allCustomers[key].createdAt).format("MMM Do YY")});
 	});
-	locals.section = 'customers';
 	view.render('overview', {
 		currentUser: req.user,
 		type:'customers',
@@ -26,5 +28,8 @@ exports = module.exports = function (req, res) {
 		keys:['name','location','date'],
 		users:req.session.allUsers,
 		customers:req.session.allCustomers,
-		jobs:req.session.allJobs});
+		jobs:req.session.allJobs,
+		helpBody:helpBody,
+		helpTitle:helpTitle
+	});
 };
