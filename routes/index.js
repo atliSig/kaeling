@@ -18,7 +18,7 @@ exports = module.exports = function (app) {
 	 */
 	app.all('*',
 		mw.setSession, 
-		mw.requireUser,
+		mw.requireUser
 	);
 	/**
 	 * General routes
