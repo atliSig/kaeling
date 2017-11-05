@@ -3,7 +3,7 @@
  */
 
 var keystone = require('keystone');
-
+var moment = require('moment');
 exports = module.exports = function (req, res) {
 
 	var view = new keystone.View(req, res);
@@ -17,14 +17,14 @@ exports = module.exports = function (req, res) {
 			'link':req.session.allUsers[key]._id,
 			'name':req.session.allUsers[key].name,
 			'email':req.session.allUsers[key].email,
-			'date':req.session.allUsers[key].prettyDate});
+			'date':moment(req.session.allUsers[key].createdAt).format('MMM Do YY')});
 	});
-	console.log(selected);
 	view.render('overview', {
 		currentUser: req.user,
 		type: 'users',
 		selected: selected,
 		titles:['Nafn', 'Póstur', 'Færður inn'],
+		keys:['name','email','date'],
 		users:req.session.allUsers,
 		customers:req.session.allCustomers,
 		jobs:req.session.allJobs});

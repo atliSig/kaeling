@@ -1,6 +1,6 @@
 extends ../layouts/default
 include ../mixins/tables.pug
-
+include ../mixins/cards.pug
 block content
 	.container-fluid.endpoint-container
 		.row.endpoint-row
@@ -11,14 +11,9 @@ block content
 						p=customer.location.street1+', '+customer.location.suburb
 						hr
 					.col-12
-						.card
-							.card-block
-								h3.card-title=customer.user.name
-								p.card-text=customer.user.email
-							.card-footer
-								a.btn.btn-primary.btn-sm.float-right(href='/users/'+customer.user._id+'/') skoða
+						+user-card(customer.user)
 						hr
 					.col-12
 							a.btn.btn-primary.float-right(href='edit/') Breyta viðskiptavini
 			.col-xl-9.col-md-7.col-12.table-column
-				+overview-table(type,titles,selected)
+				+overview-table(type,titles,selected,keys)

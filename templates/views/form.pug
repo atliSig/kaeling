@@ -1,63 +1,56 @@
 extends ../layouts/default
-
+include ../mixins/cards.pug
 block content
-
 	.container.form-container
 		.row
 			.col-12
-				form(method='post')
-					.form-group
-						label(for='name') Nafn
-						input(name='name')#name.form-control(type='text', placeholder='Nýtt nafn' value=form.name)
-					.form-group.row
-						.col-6
-							label(for='user') Starfsmaður
-							select(name='user')#user.form-control
-								each user in users
-									if user._id.equals(form.user._id)
-										option(value=user._id selected=true)=user.name
-									else
-										option(value=user._id)=user.name
-						.col-6
-							label(for='job') Verkefni
-							select(name='job')#job.form-control
-								each job in jobs
-									if job._id.equals(form.job._id)
-										option(value=job._id selected=true)=job.name
-									else
-										option(value=job._id)=job.name
-					.form-group
-						label(for='date') Dagsetning
-						input(name='date')#date.form-control(type='date', value=form.formDate)
-					.form-group.row
-						.col-12
-							p
-								a.btn.btn-primary(data-toggle='collapse', href='#attributes', aria-expanded='false', aria-controls='attributes')
-									| Sýna nánar
-							#attributes.collapse
-								.card.card-block.attribute-card
-									.row
-										each val,idx in attributes
-											.col-md-6.col-12.attribute-column
-												.card.card-block
-													.row
-														.col-md-3.col-12
-															b=val.identifier
-														.col-md-9.col-12
-															.form-check.form-check-inline.float-right
-																label.custom-control.custom-checkbox.form-check-label
-																	input.custom-control-input.form-check-input(type='checkbox' value=val.isOk)
-																	span.custom-control-indicator
-																	span.custom-control-description Í lagi
-															.form-check.form-check-inline.float-right
-																label.custom-control.custom-checkbox.form-check-label
-																	input.custom-control-input.form-check-input(type='checkbox' value=val.isFixed)
-																	span.custom-control-indicator
-																	span.custom-control-description Viðgert
-														.col-md-9.col-12
-															textarea.form-control(rows='1', placeholder='Athugasemd...' value=val.comment)
-					.form-group
-						label(for='diary') Dagbók
-						textarea(name='diary', rows='3')#diary.form-control=form.diary
-					button.btn.btn-primary.float-right(type='submit') Breyta
+				h1=form.name
+			.col-12
+				h3=form.date
+				h4=form.user.name
+			.col-12
+				a.btn.btn-danger.float-right.right-button(href='delete/') Eyða
+				a.btn.btn-primary.float-right.right-button(href='edit/') Breyta
+				a.btn.btn-secondary.float-right(href='/jobs/'+form.job._id) Til baka
+			.col-12
+				hr
+			.col-lg-6
+				+job-card(form.job)
+			.col-lg-6
+				+customer-card(form.job.customer)
+			.col-12
+				p
+					a.btn.btn-secondary(data-toggle='collapse', href='#attributes', aria-expanded='false', aria-controls='attributes')
+						| Sýna nánar
+					#attributes.collapse
+						.card.card-block.table-card
+							table.table
+								thead
+									tr
+										each title in titles
+											if title=='Athugasemd'
+												th.card-table-head.column-hd-sm(scope='col')=title
+											else
+												th.card-table-head(scope='col')=title
+
+								tbody
+									each val,idx in attributes
+										tr
+											td=val.identifier
+											if val.isOk
+												td
+													i.fa.fa-check
+											else
+												td
+													i.fa.fa-times
+											if val.isFixed
+												td
+													i.fa.fa-check
+											else
+												td
+													i.fa.fa-times
+											if val.comment
+												td.column-hd-sm=val.comment
+											else
+												td.column-hd-sm Engin athugasemd
 

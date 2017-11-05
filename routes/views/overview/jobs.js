@@ -4,14 +4,12 @@
 
 var keystone = require('keystone');
 var Form = keystone.list('Form');
-
+var moment = require('moment');
 exports = module.exports = function (req, res) {
 
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
 
-	// locals.section is used to set the currently selected
-	// item in the header navigation.
 	locals.section = 'jobs';
 
 	selected = [];
@@ -20,7 +18,8 @@ exports = module.exports = function (req, res) {
 			'link':req.session.allJobs[key]._id,
 			'name':req.session.allJobs[key].name,
 			'customer':req.session.allJobs[key].customer.name,
-			'date':req.session.allJobs[key].prettyDate});
+			'date':moment(req.session.allJobs[key].createdAt).format('MMM Do YY'),
+		});
 	});
 
 	view.render('overview', {
@@ -28,6 +27,7 @@ exports = module.exports = function (req, res) {
 		type:'jobs',
 		selected: selected,
 		titles:['Nafn','Viðskiptavinur','Fært inn'],
+		keys:[,'name','customer','date'],
 		users:req.session.allUsers,
 		customers:req.session.allCustomers,
 		jobs:req.session.allJobs});

@@ -14,15 +14,6 @@ var routes = {
 // Setup Route Bindings
 exports = module.exports = function (app) {
 	/**
-	 * Update route for sessions
-	 */
-	app.get('/update',
-	mw.getAllUsers,
-	mw.getAllCustomers,
-	mw.getAllJobs,
-	routes.views.index.redirect
-)
-	/**
 	 * Ensure user on all routes
 	 */
 	app.all('*',
@@ -60,11 +51,9 @@ exports = module.exports = function (app) {
 		mw.getJobById,
 		mw.getFormsByJobId,
 		routes.views.endpoint.job.get);
-	/*app.get('/forms/:formId',
+	app.get('/forms/:formId',
 		mw.getFormById,
-		mw.getAllUsers,
-		mw.getAllJobs,
-		routes.views.endpoint.form.get);*/
+		routes.views.endpoint.form.get);
 	app.get('/customers/:customerId',
 		mw.getCustomerById,
 		mw.getJobsByCustomerId,

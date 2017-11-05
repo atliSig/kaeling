@@ -1,4 +1,32 @@
-mixin overview-table(type,titles,selected)
+mixin overview-table(type,titles,selected,keys)
+	.table-responsive
+		table.table.table-hover
+			thead
+				tr
+					- var n = 1
+					each title in titles
+						if n == 2
+							th(scope='col').column-hd-md=title
+						else if n > 3
+							th(scope='col').column-hd-sm=title
+						else
+							th(scope='col')=title
+						- n++
+			tbody
+				each s in selected
+					tr.clickable(data-href=s.link, data-type=type)
+						- var n = 1
+						each key in keys
+							if key
+								if n == 2
+									td.column-hd-md=s[key]
+								else if n > 3
+									td.column-hd-sm=s[key]
+								else
+									td=s[key]
+							- n++
+
+mixin overview-job-table(type,titles,selected,keys)
 	.table-responsive
 		table.table.table-hover
 			thead
@@ -16,12 +44,20 @@ mixin overview-table(type,titles,selected)
 				each s in selected
 					tr.clickable(data-href=s.link, data-type=type)
 						- var n = 0
-						each val, i in s
-							if i !=='link'
+						each key in keys
+							if key
 								if n == 2
-									td.column-hd-md=val
+									td.column-hd-md=s[key]
 								else if n > 3
-									td.column-hd-sm=val
+									td.column-hd-sm=s[key]
 								else
-									td=val
-							- n++
+									td=s[key]
+								- n++
+					tr.info-row
+						td(colspan=titles.length)
+							.container-fluid
+								.row
+									.col-6.col-no-padding
+										h5 Dagbók
+										p=s.diary
+									.col-6.col-no-padding

@@ -9,7 +9,7 @@ block content
 						label(for='name') Nafn
 						input(name='name')#name.form-control(type='text', value=job.name)
 					.form-group.row
-						.col-6
+						.col-md-6.col-12
 							label(for='user') Eigandi verks
 							select(name='user')#user.form-control
 								each user in users
@@ -17,17 +17,18 @@ block content
 										option(value=user._id selected=true)=user.name
 									else
 										option(value=user._id)=user.name
-						.col-6
+						.col-md-6.col-12
 							label(for='customer') Viðskiptavinur
 							select(name='customer')#customer.form-control
 								each customer in customers
-									if customer._id.equals(job.customer._id)
+									if customer._id == job.customer._id
 										option(value=customer._id selected=true)=customer.name
 									else
 										option(value=customer._id)=customer.name
-					.form-group
-						label(for='period') Tíðni skoðana
-						input(name='period')#period.form-control(type='number', value=job.period)
+					.form-group.row
+						.col-md-6.col-12
+							label(for='period') Tíðni skoðana
+							input(name='period')#period.form-control(type='number', value=job.period)
 
 					button.btn.btn-primary.float-right.right-button(type='submit') Breyta
 					a.btn.btn-secondary.float-right(href='../') Til baka

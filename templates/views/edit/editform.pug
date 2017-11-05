@@ -5,6 +5,8 @@ block content
 	.container.form-container
 		.row
 			.col-12
+				h4 Grunnupplýsingar
+			.col-12
 				form(method='post')
 					.form-group
 						label(for='name') Nafn
@@ -31,8 +33,20 @@ block content
 						input.form-control(name='date', type='date', value=form.formDate)
 					.form-group.row
 						.col-12
+							h4 Mælingar
+							.row
+								each val,idx in measurements
+									.col-md-6.col-12.form-group
+										label=val.identifier
+										.input-group
+											input(type='number', value=val.value, step=0.1).form-control
+											span.input-group-addon=val.unit
+					.form-group.row
+						.col-12
+								h4 Annað
+						.col-12
 							p
-								a.btn.btn-primary(data-toggle='collapse', href='#attributes', aria-expanded='false', aria-controls='attributes')
+								a.btn.btn-secondary(data-toggle='collapse', href='#attributes', aria-expanded='false', aria-controls='attributes')
 									| Sýna nánar
 							#attributes.collapse
 								.card.card-block.attribute-card
@@ -61,5 +75,5 @@ block content
 					.form-group
 						label(for='diary') Dagbók
 						textarea(name='diary', rows='3')#diary.form-control=form.diary
-					button.btn.btn-primary.float-right#change-form(type='submit') Breyta
-
+					button.btn.btn-primary.float-right#change-form.right-button(type='submit') Breyta
+					a.btn.btn-secondary.float-right(href='../') Til baka

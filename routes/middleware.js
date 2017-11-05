@@ -8,6 +8,7 @@
  * modules in your project's /lib directory.
  */
 var _ = require('lodash');
+var async = require('async');
 
 var keystone = require('keystone');
 var Job = keystone.list('Job');
@@ -78,9 +79,6 @@ exports.getFormsByCurrentUser = function (req, res, next) {
 			}
 		})
 		.exec(function (err, forms) {
-			Object.keys(forms).forEach(function (key) {
-				forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
-			});
 			req.currentUserForms = forms;
 			next();
 		});
@@ -91,9 +89,6 @@ exports.getJobsByCurrentUser = function (req, res, next) {
 		.populate('user')
 		.populate('customer')
 		.exec(function (err, jobs) {
-			Object.keys(jobs).forEach(function (key) {
-				jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
-			});
 			req.currentUserJobs = jobs;
 			next();
 		});
@@ -106,20 +101,17 @@ exports.getJobsByCurrentUser = function (req, res, next) {
 exports.getAllJobs = function (req, res, next) {
 	Job.model.find().populate('customer').exec(function (err, jobs) {
 		Object.keys(jobs).forEach(function (key) {
-			jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
+			jobs[key].createdAt = moment(jobs[key].createdAt).format("MMM Do YY");
 		});
-		req.session.allJobs = jobs;
+		req.session.allJobs = {};
 		next();
 	});
 }
 
+
+
 exports.getAllUsers = function (req, res, next) {
 	User.model.find().exec(function (err, users) {
-		Object.keys(users).forEach(function (key) {
-			users[key].prettyDate = moment(users[key].createdAt).format("MMM Do YY");
-			console.log('hallo');
-		});
-		console.log('lol');
 		req.session.allUsers = users;
 		next();
 	});
@@ -127,10 +119,6 @@ exports.getAllUsers = function (req, res, next) {
 
 exports.getAllCustomers = function (req, res, next) {
 	Customer.model.find().exec(function (err, customers) {
-		Object.keys(customers).forEach(function (key) {
-			customers[key].prettyDate = moment(customers[key].createdAt).format("MMM Do YY");
-		});
-		console.log(customers);
 		req.session.allCustomers = customers;
 		next();
 	});
@@ -148,9 +136,6 @@ exports.getAllForms = function (req, res, next) {
 		})
 		.populate('user')
 		.exec(function (err, forms) {
-			Object.keys(forms).forEach(function (key) {
-				forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
-			});
 			req.allForms = forms;
 			next();
 		});
@@ -165,7 +150,6 @@ exports.getJobById = function (req, res, next) {
 		.populate('user')
 		.populate('customer')
 		.exec(function (err, job) {
-			job.prettyDate = moment(job.createdAt).format("MMM Do YY");
 			req.jobById = job;
 			next();
 		});
@@ -181,15 +165,20 @@ exports.getFormById = function (req, res, next) {
 		.populate({
 			path: 'job',
 			model: 'Job',
-			populate: {
+			populate: [{
 				path: 'customer',
-				model: 'Customer'
-			}
+				model: 'Customer',
+				populate: {
+					path:'user',
+					model:'User'
+				}
+			},{
+				path: 'user',
+				model:'User'
+			}]
 		})
 		.populate('user')
 		.exec(function (err, form) {
-			console.log(form);
-			form.formDate = moment(form.createdAt).format("YYYY-MM-DD");
 			req.formById = form;
 			next();
 		});
@@ -220,9 +209,6 @@ exports.getFormsByJobId = function (req, res, next) {
 		})
 		.populate('user')
 		.exec(function (err, forms) {
-			Object.keys(forms).forEach(function (key) {
-				forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
-			});
 			req.formsByJob = forms;
 			next();
 		});
@@ -239,9 +225,6 @@ exports.getFormsByUserId = function (req, res, next) {
 			}
 		})
 		.exec(function (err, forms) {
-			Object.keys(forms).forEach(function (key) {
-				forms[key].prettyDate = moment(forms[key].createdAt).format("MMM Do YY");
-			});
 			req.formsByUser = forms;
 			next();
 		});
@@ -252,9 +235,6 @@ exports.getJobsByCustomerId = function(req,res,next){
 		.find({customer:req.params.customerId})
 		.populate('user')
 		.exec(function (err, jobs) {
-			Object.keys(jobs).forEach(function (key) {
-				jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
-			});
 			req.jobsByCustomer = jobs;
 			next();
 		});
@@ -272,8 +252,6 @@ exports.getUpcomingJobs = function (req, res, next) {
 			Object.keys(jobs).forEach(function (key) {
 				if (moment(jobs[key].createdAt).add(jobs[key].period, 'months').isAfter(moment().subtract(req.user.warningDays, 'days'))) {
 					if (moment(jobs[key].createdAt).add(jobs[key].period, 'months').isBefore(moment().add(req.user.warningDays, 'days'))) {
-						jobs[key].prettyDate = moment(jobs[key].createdAt).format("MMM Do YY");
-						jobs[key].deadline = moment(jobs[key].createdAt).add(jobs[key].period,'months').format("MMM Do YY");
 						upcoming.push(jobs[key]);
 					}
 				}
@@ -313,7 +291,6 @@ exports.updateUser = function(req,res,next){
 
 exports.updateForm = function(req,res,next){
 	req.body.checks = JSON.parse(req.body.attributes);
-	console.log(req.body);
 	Form.model.findById(req.params.formId).exec(function(err,form){
 		form.getUpdateHandler(req).process(req.body,function(err){
 			next();
@@ -345,9 +322,18 @@ exports.updateForm = function(req,res,next){
  * Session related
  */
 exports.setSession = function(req,res,next){
-	if(!req.session.allUsers || !req.session.allUsers || !req.session.allUsers){
-		res.redirect('/update');
-	} else{
+	if(_.isEmpty(req.session.allUsers) || _.isEmpty(req.session.allJobs) || _.isEmpty(req.session.allCustomers)){
+		Job.model.find().populate('customer').exec(function (err, jobs) {
+			req.session.allJobs = jobs;
+			User.model.find().exec(function (err, users) {
+				req.session.allUsers = users;
+				Customer.model.find().exec(function (err, customers) {
+					req.session.allCustomers = customers;
+					next();
+				});
+			});
+		});
+	}else{
 		next();
 	}
 }

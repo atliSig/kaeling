@@ -3,7 +3,7 @@
  */
 
 var keystone = require('keystone');
-
+var moment = require('moment');
 module.exports.get = function (req, res) {
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
@@ -13,16 +13,17 @@ module.exports.get = function (req, res) {
 			'link':req.formsByJob[key]._id,
 			'name':req.formsByJob[key].name,
 			'user':req.formsByJob[key].user.name,
-			'date':req.formsByJob[key].prettyDate,
+			'date':moment(req.formsByJob[key].createdAt).format("MMM Do YY"),
+			'diary':req.formsByJob[key].diary,
 			});
 	});
-	console.log(req.jobById._id.toString());
 	view.render('job', {
 		currentUser: req.user,
 		type: 'forms',
 		job: req.jobById, 
 		selected: selected,
 		titles:['Nafn','Starfsmaður','Dagsetning'],
+		keys:['name','user','date'],
 		users:req.session.allUsers,
 		customers:req.session.allCustomers,
 		jobs:req.session.allJobs}

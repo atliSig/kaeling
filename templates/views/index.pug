@@ -5,7 +5,7 @@ block content
 
 	.container-fluid
 		.row
-			.col-12
+			.col-12.col-no-padding
 				ul.nav.nav-tabs.nav-fill(role='tablist')
 					li.nav-item
 						a.nav-link.active(href='#forms' data-toggle="tab" role="tab") Skýrslur
@@ -13,16 +13,18 @@ block content
 						a.nav-link(href='#jobs' data-toggle="tab" role="tab") Verk
 					li.nav-item
 						a.nav-link(href='#upcoming' data-toggle="tab" role="tab") Áríðandi
+		.row
+			.col-12
 				.tab-content
 					.tab-pane.active#forms(role='tabpanel')
 						.row
-							.col-12
-								+overview-table('forms',formTitles,formSelected)
+							.col-12.col-no-padding
+								+overview-table('forms',formTitles,formSelected, formKeys)
 					.tab-pane#jobs(role='tabpanel')
 						.row
-							.col-12
-								+overview-table('jobs',jobTitles,jobSelected)
+							.col-12.col-no-padding
+								+overview-table('jobs',jobTitles,jobSelected, jobKeys)
 					.tab-pane#upcoming(role='tabpanel')
 						.row
-							.col-12
-								+overview-table('upcoming',upcomingTitles,upcomingSelected)
+							.col-12.col-no-padding
+								+overview-table('jobs',upcomingTitles,upcomingSelected, upcomingKeys)

@@ -3,6 +3,7 @@
  */
 
 var keystone = require('keystone');
+var moment = require('moment');
 
 module.exports.get = function (req, res) {
 
@@ -16,7 +17,7 @@ module.exports.get = function (req, res) {
 			'name':req.formsByUser[key].name,
 			'customer':req.formsByUser[key].job.customer.name,
 			'job': req.formsByUser[key].job.name,
-			'date':req.formsByUser[key].prettyDate,
+			'date':moment(req.formsByUser[key].createdAt).format("MMM Do YY"),
 			});
 	});
 
@@ -26,7 +27,8 @@ module.exports.get = function (req, res) {
 		count: req.formsByUser.length,
 		type:'forms',
 		selected: selected,
-		titles:['nafn','Viðskiptavinur','Yfirverk','Dagsetning'],
+		keys:['name','customer','job','date'],
+		titles:['Nafn','Viðskiptavinur','Yfirverk','Dagsetning'],
 		users:req.session.allUsers,
 		customers:req.session.allCustomers,
 		jobs:req.session.allJobs});

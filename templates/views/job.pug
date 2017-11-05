@@ -1,7 +1,51 @@
 extends ../layouts/default
 include ../mixins/tables.pug
-
+include ../mixins/cards.pug
 block content
+	//.container-fluid
+		.row
+			.col-12.col-no-padding
+				ul.nav.nav-tabs.nav-fill(role='tablist')
+					li.nav-item
+						a.nav-link.active(href='#info' data-toggle="tab" role="tab") Upplýsingar
+					li.nav-item
+						a.nav-link(href='#table' data-toggle="tab" role="tab") Skýrslur
+		.row
+			.col-12
+				.tab-content
+					.tab-pane.active#info(role='tabpanel')
+						.row
+							.col-12.col-no-padding
+								h4=job.name
+								p=job.prettyDate
+								hr
+							.col-12.col-no-padding
+								+customer-card(job.customer)
+								hr
+							.col-12.col-no-padding
+								+user-card(job.user)
+								hr
+							.col-12.col-no-padding
+								button.float-right.right-button.btn.btn-primary(type='button', data-toggle='modal', data-target='#form-modal') 
+									i.fa.fa-plus.button-icon
+									| Ný skýrsla
+								a.btn.btn-secondary.float-right(href='edit/') Breyta verkefni
+					.tab-pane#table(role='tabpanel')
+						.row
+							.col-12.col-no-padding
+								if selected.length!=0
+									+overview-job-table(type,titles,selected,keys)
+								else
+									.container-fluid.d-flex.justify-content-center.align-items-center.empty
+										.row
+											.col-md-10.offset-md-1
+												.card
+													.card-block
+														h4.card-title Engar skýrslur
+														p.card-text Það hafa ekki verið gerðar neinar skýrslur fyrir þetta verkefni.
+														p.card-text Viltu búa til nýja skýrslu fyrir þetta verkefni?
+														button.btn.btn-primary.float-right(role='button') Ný skýrsla
+
 	.container-fluid.endpoint-container
 		.row.endpoint-row
 			.col-xl-3.col-md-5.col-12.left-column
@@ -11,26 +55,23 @@ block content
 						p=job.prettyDate
 						hr
 					.col-12
-						.card
-							.card-block
-								h3.card-title=job.customer.name
-								p.card-text=job.customer.location.street1+', '+job.customer.location.suburb
-							.card-footer
-								a.btn.btn-primary.btn-sm.float-right(href='/customers/'+job.customer._id+'/') skoða
+						+customer-card(job.customer)
 						hr
 					.col-12
-						.card
-							.card-block
-								h3.card-title=job.user.name
-								p.card-text=job.user.email
-							.card-footer
-								a.btn.btn-primary.btn-sm.float-right(href='/users/'+job.user._id+'/') skoða
+						+user-card(job.user)
 						hr
 					.col-12
-							a.btn.btn-primary.float-right(href='edit/') Breyta verkefni
+						button.float-right.right-button.btn.btn-primary(type='button', data-toggle='modal', data-target='#form-modal') 
+							i.fa.fa-plus.button-icon
+							| Ný skýrsla
+						a.btn.btn-secondary.float-right(href='edit/') Breyta verkefni
+							
 			.col-xl-9.col-md-7.col-12.table-column
 				if selected.length!=0
-					+overview-table(type,titles,selected)
+					//.row
+						.col-12
+							b='Skýrslur fyrir verkefnið: '+job.name
+					+overview-job-table(type,titles,selected,keys)
 				else
 					.container-fluid.d-flex.justify-content-center.align-items-center.empty
 						.row

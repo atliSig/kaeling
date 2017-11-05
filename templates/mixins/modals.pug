@@ -36,7 +36,7 @@ mixin newform()
 							p Til að búa til skýrslu þarf fyrst að búa til verkefni.
 					.modal-footer
 						button.btn.btn-secondary(type='button', data-dismiss='modal') Loka
-						if !jobs
+						if jobs
 							button.btn.btn-primary(type='submit') Vista
 						else
 							button.btn.btn-primary#new-job(type='button' data-dismiss='modal') Nýtt verkefni

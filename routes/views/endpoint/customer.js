@@ -3,6 +3,7 @@
  */
 
 var keystone = require('keystone');
+var moment = require('moment');
 
 module.exports.get = function (req, res) {
 
@@ -14,7 +15,7 @@ module.exports.get = function (req, res) {
 			'link':req.jobsByCustomer[key]._id,
 			'name':req.jobsByCustomer[key].name,
 			'user':req.jobsByCustomer[key].user.name,
-			'date':req.jobsByCustomer[key].prettyDate,
+			'date':moment(req.jobsByCustomer[key].createdAt).format("MMM Do YY"),
 			});
 	});
 	view.render('customer', {
@@ -23,6 +24,7 @@ module.exports.get = function (req, res) {
 		customer: req.customerById,
 		selected:selected,
 		titles:['Nafn', 'Eigandi','Dagsetning'],
+		keys:['name','user','date'],
 		users:req.session.allUsers,
 		customers:req.session.allCustomers,
 		jobs:req.session.allJobs

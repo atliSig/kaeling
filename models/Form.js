@@ -38,6 +38,34 @@ Form.add({
         type:Types.Textarea, 
         required:false, 
         label:'Dagbók'},
+    measurements:{
+        m1:{
+            isMeasurement:{type:Types.Boolean, default:true},
+            identifier:{type: String, default:'Olíuþrýstingur'},
+            value: {type: Number, label: 'gildi', default:0},
+            unit: {type: String, default:'Bör'}
+        },m2:{
+            isMeasurement:{type:Types.Boolean, default:true},
+            identifier:{type: String, default:'Láþrýstingur'},
+            value: {type: Number, label: 'gildi', default:0},
+            unit: {type: String, default:'Bör'}
+        },m3:{
+            isMeasurement:{type:Types.Boolean, default:true},
+            identifier:{type: String, default:'Háþrýstingur'},
+            value: {type: Number, label: 'gildi', default:0},
+            unit: {type: String, default:'Bör'}
+        },m4:{
+            isMeasurement:{type:Types.Boolean, default:true},
+            identifier:{type: String, default:'Yfirhitun'},
+            value: {type: Number, label: 'gildi', default:0},
+            unit: {type: String, default:'Gráður'}
+        },m5:{
+            isMeasurement:{type:Types.Boolean, default:true},
+            identifier:{type: String, default:'Afbræðsla'},
+            value: {type: Number, label: 'gildi', default:0},
+            unit: {type: String, default:'Amp'}
+        }
+    },
     checks:{
         at1:{
             isAttribute:{type:Types.Boolean, default:true},
