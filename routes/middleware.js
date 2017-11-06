@@ -100,10 +100,7 @@ exports.getJobsByCurrentUser = function (req, res, next) {
  */
 exports.getAllJobs = function (req, res, next) {
 	Job.model.find().populate('customer').exec(function (err, jobs) {
-		Object.keys(jobs).forEach(function (key) {
-			jobs[key].createdAt = moment(jobs[key].createdAt).format("MMM Do YY");
-		});
-		req.session.allJobs = {};
+		req.session.allJobs = jobs;
 		next();
 	});
 }
@@ -301,6 +298,7 @@ exports.updateUser = function(req,res,next){
 
 exports.updateForm = function(req,res,next){
 	req.body.checks = JSON.parse(req.body.attributes);
+	req.body.measurements = JSON.parse(req.body.measurements);
 	Form.model.findById(req.params.formId).exec(function(err,form){
 		form.getUpdateHandler(req).process(req.body,function(err){
 			next();
@@ -329,6 +327,30 @@ exports.updateForm = function(req,res,next){
  }
 
 /**
+ * Delete middleware
+ */
+
+ exports.deleteForm = function(req,res,next){
+	 Form.model
+	 	.findById(req.params.formId)
+	 	.remove(function(err){
+			next();
+		 });
+ }
+
+ exports.deleteJob = function(req,res,next){
+	 Job.model
+		 .findById(req.params.jobId)
+		 .remove(function(err){
+			Form.model
+				.find({job:req.params.jobId})
+				.remove(function(err){
+					next();
+				});
+		});
+ }
+
+/**
  * Session related
  */
 exports.setSession = function(req,res,next){
@@ -346,4 +368,25 @@ exports.setSession = function(req,res,next){
 	}else{
 		next();
 	}
+}
+
+exports.setUsersSession = function(req,res,next){
+	User.model.find().exec(function (err, users) {
+		req.session.allUsers = users;
+		next();
+	});
+}
+
+exports.setJobsSession = function(req,res,next){
+	Job.model.find().populate('customer').exec(function (err, jobs) {
+		req.session.allJobs = jobs;
+		next();
+	});
+}
+
+exports.setCustomersSession = function(req,res,next){
+	Customer.model.find().exec(function (err, customers) {
+		req.session.allCustomers = customers;
+		next();
+	});
 }

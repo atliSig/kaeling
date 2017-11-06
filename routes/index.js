@@ -24,9 +24,6 @@ exports = module.exports = function (app) {
 	 * General routes
 	 */
 	app.get('/',
-		mw.getAllJobs,
-		mw.getAllCustomers,
-		mw.getAllUsers,
 		mw.getUpcomingJobs,
 		mw.getFormsByCurrentUser,
 		mw.getJobsByCurrentUser,
@@ -73,17 +70,17 @@ exports = module.exports = function (app) {
 		routes.views.endpoint.form.edit);
 	app.post('/jobs/:jobId/edit',
 		mw.updateJob,
-		mw.getAllJobs,
 		mw.getJobById,
+		mw.setJobsSession,
 		routes.views.endpoint.job.edit);
 	app.post('/customers/:customerId/edit',
 		mw.updateCustomer,
-		mw.getAllCustomers,
+		mw.setCustomersSession,
 		mw.getCustomerById,
 		routes.views.endpoint.customer.edit);
 	app.post('/users/:userId/edit',
 		mw.updateUser,
-		mw.getAllUsers,
+		mw.setUsersSession,
 		mw.getUserById,
 		routes.views.endpoint.user.edit);
 	/**
@@ -110,6 +107,16 @@ exports = module.exports = function (app) {
 		routes.views.endpoint.form.create)	
 	app.post('/create/jobs',
 		mw.createJob,
-		mw.getAllJobs,
+		mw.setJobsSession,
 		routes.views.endpoint.job.create)
+	/**
+	 * Delete routes
+	 */
+	app.get('/forms/:formId/delete',
+		mw.deleteForm,
+		routes.views.endpoint.form.delete)
+	app.get('/jobs/:jobId/delete',
+		mw.deleteJob,
+		mw.setJobsSession,
+		routes.views.endpoint.job.delete)
 };

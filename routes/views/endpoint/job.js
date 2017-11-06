@@ -13,13 +13,21 @@ module.exports.get = function (req, res) {
 		' yfirlit yfir allar þær skýrslur sem eru skráðar á þetta verkefni';
 	selected = [];
 	Object.keys(req.formsByJob).forEach(function(key) {
+		var measurements = {};
+		var form = req.formsByJob[key];
+		Object.keys(form.measurements).forEach(function(key) {
+			if(typeof form.measurements[key] === 'object' && 'isMeasurement' in form.measurements[key]){
+				measurements[key]=form.measurements[key];
+			}
+		});
 		selected.push({
 			'link':req.formsByJob[key]._id,
 			'name':req.formsByJob[key].name,
 			'user':req.formsByJob[key].user.name,
 			'date':moment(req.formsByJob[key].createdAt).format("MMM Do YY"),
 			'diary':req.formsByJob[key].diary,
-			});
+			'measurements':measurements,
+		});
 	});
 	view.render('job', {
 		currentUser: req.user,
@@ -55,6 +63,10 @@ module.exports.edit = function(req,res){
 
 module.exports.create = function(req,res){
 	res.redirect('/jobs/'+req.jobId);
+}
+
+module.exports.delete = function(req,res){
+	res.redirect('/jobs');
 }
 
 exports = module.exports;

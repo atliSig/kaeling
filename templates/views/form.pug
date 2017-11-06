@@ -4,24 +4,47 @@ block content
 	.container.form-container
 		.row
 			.col-12
-				h1=form.name
-			.col-12
+				h2=form.name
 				h3=form.date
 				h4=form.user.name
+				a.btn.btn-secondary.float-right(data-toggle='collapse', href='#details', aria-expanded='false', aria-controls='details')
+						| Nánari upplýsingar
+			.col-12
+				p
+					#details.collapse
+						.row
+							.col-lg-6.col-12
+								+job-card(form.job)
+							.col-lg-6.col-12
+								+customer-card(form.job.customer)
+			.col-12
+				hr
 			.col-12
 				a.btn.btn-danger.float-right.right-button(href='delete/') Eyða
 				a.btn.btn-primary.float-right.right-button(href='edit/') Breyta
 				a.btn.btn-secondary.float-right(href='/jobs/'+form.job._id) Til baka
 			.col-12
 				hr
-			.col-lg-6
-				+job-card(form.job)
-			.col-lg-6
-				+customer-card(form.job.customer)
+			.col-12
+				h4 Mælingar og annað
+			.col-12
+				table.table
+					thead
+						tr
+							th(scope='col') Mæling
+							th(scope='col') Gildi
+							th(scope='col') Eining
+					tbody
+						each val,idx in measurements
+							tr
+								td=val.identifier
+								td=val.value
+								td=val.unit
+			.col-12
+				a.btn.btn-secondary.float-right(data-toggle='collapse', href='#attributes', aria-expanded='false', aria-controls='attributes')
+						| Sýna meira
 			.col-12
 				p
-					a.btn.btn-secondary(data-toggle='collapse', href='#attributes', aria-expanded='false', aria-controls='attributes')
-						| Sýna nánar
 					#attributes.collapse
 						.card.card-block.table-card
 							table.table
@@ -32,7 +55,6 @@ block content
 												th.card-table-head.column-hd-sm(scope='col')=title
 											else
 												th.card-table-head(scope='col')=title
-
 								tbody
 									each val,idx in attributes
 										tr
@@ -53,4 +75,9 @@ block content
 												td.column-hd-sm=val.comment
 											else
 												td.column-hd-sm Engin athugasemd
+			if form.diary
+				.col-12
+					h4 Dagbók
+				.col-md-6
+					p=form.diary
 

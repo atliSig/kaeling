@@ -26,9 +26,9 @@ mixin overview-table(type,titles,selected,keys)
 									td=s[key]
 							- n++
 
-mixin overview-job-table(type,titles,selected,keys)
+mixin overview-job-table(type,titles,selected,keys,measurements)
 	.table-responsive
-		table.table.table-hover
+		table.table
 			thead
 				tr
 					- var n = 1
@@ -42,7 +42,7 @@ mixin overview-job-table(type,titles,selected,keys)
 						- n++
 			tbody
 				each s in selected
-					tr.clickable(data-href=s.link, data-type=type)
+					tr.overview-row
 						- var n = 0
 						each key in keys
 							if key
@@ -53,11 +53,25 @@ mixin overview-job-table(type,titles,selected,keys)
 								else
 									td=s[key]
 								- n++
-					tr.info-row
-						td(colspan=titles.length)
+						td
+							a.btn.btn-secondary.btn-sm.row-button(href='/forms/'+s.link) skoða
+					tr.info-row(data-href=s.link)
+						- var span = titles.length+1
+						td(colspan=span).detail-cell
 							.container-fluid
 								.row
-									.col-6.col-no-padding
-										h5 Dagbók
-										p=s.diary
-									.col-6.col-no-padding
+									.col-12.col-no-padding
+										.table-responsive
+											table.table.detail-table
+												thead
+													tr
+														th(scope='col') Mæling
+														th(scope='col') Gildi
+														th(scope='col') Eining
+												tbody
+													each val,idx in s.measurements
+														if val
+															tr
+																td=val.identifier
+																td=val.value
+																td=val.unit

@@ -40,7 +40,8 @@
 }
 
 .form-container{
-	margin-top:50px
+	margin-top:50px;
+	margin-bottom:50px;
 }
 
 .info-card{
@@ -116,10 +117,28 @@
 
 .info-row{
 	background-color: #f7f7f9;
+	display:none;
 }
 
 .form-control + .input-group-addon:not(:first-child) {
 	width: 80px !important;
+}
+
+.overview-row:hover{
+	cursor:pointer;
+	background-color: rgba(0, 0, 0, 0.075);
+}
+
+.overview-row.active{
+	background-color: rgba(0, 0, 0, 0.075);
+}
+
+.detail-cell{
+	padding: 0 !important;
+}
+
+.detail-table{
+	margin-bottom: 0 !important;	
 }
 // Extra small devices (portrait phones, less than 576px)
 @media (max-width: 575px) { 

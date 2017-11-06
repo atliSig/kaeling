@@ -9,12 +9,14 @@ block content
 						label(for='name') Nafn
 						input(name='name', type='text', value=user.name)#name.form-control
 					.form-group.row
-						.col-6
-							label(for='email') Email
-							input(name='email',type='email',value=user.email)#email.form-control
-						.col-6
-							label(for='warningDays') Viðvörunardagar
-							input(name='warningDays', type='number', value=user.warningDays)#warningDays.form-control
+						.col-md-6.col-12
+							.form-group
+								label(for='email') Veffang
+								input(name='email',type='email',value=user.email)#email.form-control
+						.col-md-6.col-12
+							.form-group
+								label(for='warningDays') Viðvörunardagar
+								input(name='warningDays', type='number', value=user.warningDays, min="0")#warningDays.form-control
 					button.btn.btn-primary.float-right.right-button(type='submit') Breyta
 					a.btn.btn-secondary.float-right(href='../') Til baka
 

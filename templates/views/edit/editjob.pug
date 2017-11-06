@@ -28,7 +28,7 @@ block content
 					.form-group.row
 						.col-md-6.col-12
 							label(for='period') Tíðni skoðana
-							input(name='period')#period.form-control(type='number', value=job.period)
+							input(name='period')#period.form-control(type='number', value=job.period, min="0")
 
 					button.btn.btn-primary.float-right.right-button(type='submit') Breyta
 					a.btn.btn-secondary.float-right(href='../') Til baka

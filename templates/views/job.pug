@@ -65,12 +65,13 @@ block content
 							i.fa.fa-plus.button-icon
 							| Ný skýrsla
 						a.btn.btn-secondary.float-right(href='edit/') Breyta verkefni
+					.col-12
+						hr
+					.col-12
+						a.btn.btn-danger.float-right(href='delete/') Eyða verkefni
 							
 			.col-xl-9.col-md-7.col-12.table-column
 				if selected.length!=0
-					//.row
-						.col-12
-							b='Skýrslur fyrir verkefnið: '+job.name
 					+overview-job-table(type,titles,selected,keys)
 				else
 					.container-fluid.d-flex.justify-content-center.align-items-center.empty

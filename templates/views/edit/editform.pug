@@ -39,7 +39,7 @@ block content
 									.col-md-6.col-12.form-group
 										label=val.identifier
 										.input-group
-											input(type='number', value=val.value, step=0.1).form-control
+											input(type='number', value=val.value, step=0.1, min="0" data-key=idx, data-identifier=val.identifier, data-unit=val.unit).form-control.measurement
 											span.input-group-addon=val.unit
 					.form-group.row
 						.col-12
@@ -50,8 +50,10 @@ block content
 									| Sýna nánar
 							#attributes.collapse
 								.card.card-block.attribute-card
-									input#nAttributes(type='hidden', name='nAttributes', value=count)
+									input#nAttributes(type='hidden', name='nAttributes', value=attributeCount)
+									input#nMeasurements(type='hidden', name='nMeasurements', value=measurementCount)
 									input#attributes(type='hidden',name='attributes')
+									input#measurements(type='hidden',name='measurements')
 									.row
 										each val,idx in attributes
 											.col-md-6.col-12.attribute-column

@@ -87,7 +87,7 @@ mixin jobModal()
 												option(value=c._id)=c.name
 							.form-group
 								label(for='period') Tíðni skoðana
-								input(name='period' type='number')#period.form-control
+								input(name='period' type='number', min="0")#period.form-control
 						else
 							p Til að búa til verkefni þarf fyrst að búa til viðskiptavin.
 					.modal-footer

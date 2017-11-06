@@ -26,6 +26,7 @@ module.exports.get = function(req,res,next){
 			measurements[key]=measures[key];
 		}
 	});
+	req.formById.date = moment(req.formById.createdAt).format("MMM Do YY");
 	view.render('form',{
 		form:req.formById,
 		attributes:attributes,
@@ -64,7 +65,8 @@ module.exports.edit = function (req, res) {
 	req.formById.date = moment(req.formById.createdAt).format("MMM Do YY");
 	view.render('edit/editform', {
 		currentUser: req.user,
-		count: Object.keys(attributes).length,
+		attributeCount: Object.keys(attributes).length,
+		measurementCount: Object.keys(measurements).length,
 		form: req.formById,
 		attributes:attributes,
 		measurements:measurements,
@@ -78,6 +80,10 @@ module.exports.edit = function (req, res) {
 
 module.exports.create = function(req,res){
 	res.redirect('/forms/'+req.formId+'/edit');
+}
+
+module.exports.delete = function(req,res){
+	res.redirect('/forms');
 }
 
 exports = module.exports;
