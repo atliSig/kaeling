@@ -18,13 +18,13 @@ block content
 				.tab-content
 					.tab-pane.active#forms(role='tabpanel')
 						.row
-							.col-12.col-no-padding
+							.col-12.col-no-padding.index-container
 								+overview-table('forms',formTitles,formSelected, formKeys)
 					.tab-pane#jobs(role='tabpanel')
 						.row
-							.col-12.col-no-padding
+							.col-12.col-no-padding.index-container
 								+overview-table('jobs',jobTitles,jobSelected, jobKeys)
 					.tab-pane#upcoming(role='tabpanel')
 						.row
-							.col-12.col-no-padding
+							.col-12.col-no-padding.index-container
 								+overview-table('jobs',upcomingTitles,upcomingSelected, upcomingKeys)

@@ -1,77 +1,117 @@
 mixin overview-table(type,titles,selected,keys)
-	.table-responsive
-		table.table.table-hover
-			thead
-				tr
-					- var n = 1
-					each title in titles
-						if n == 2
-							th(scope='col').column-hd-md=title
-						else if n > 3
-							th(scope='col').column-hd-sm=title
-						else
-							th(scope='col')=title
-						- n++
-			tbody
-				each s in selected
-					tr.clickable(data-href=s.link, data-type=type)
+	if selected.length == 0
+		.container-fluid.d-flex.justify-content-center.align-items-center.empty
+			.col-sm-9.col-lg-6.col-lg-4
+				.card
+					.card-block
+						if type=='jobs'
+							h4.card-title Engin verkefni
+							p.card-text Hér er engin verkefni að finna
+							p.card-text Viltu búa til nýtt verkefni?
+							button.float-right.right-button.btn.btn-primary(type='button', data-toggle='modal', data-target='#job-modal') 
+								i.fa.fa-plus.button-icon
+								| Nýtt verkefni
+						if type=='forms'
+							h4.card-title Engar skýrslur
+							p.card-text Hér eru engar skýrslur að finna.
+							p.card-text Viltu búa til nýja skýrslu?
+							button.float-right.right-button.btn.btn-primary(type='button', data-toggle='modal', data-target='#form-modal') 
+								i.fa.fa-plus.button-icon
+								| Ný skýrsla
+						if type=='customers'
+							h4.card-title Engir viðskiptavinir
+							p.card-text Hér er enga viðskiptavini að finna
+							p.card-text Viltu búa til nýjan viðskiptavin?
+							button.float-right.right-button.btn.btn-primary(type='button', data-toggle='modal', data-target='#customer-modal') 
+								i.fa.fa-plus.button-icon
+								| Nýr viðskiptavinur
+	else
+		.table-responsive
+			table.table.table-hover
+				thead
+					tr
 						- var n = 1
-						each key in keys
-							if key
-								if n == 2
-									td.column-hd-md=s[key]
-								else if n > 3
-									td.column-hd-sm=s[key]
-								else
-									td=s[key]
+						each title in titles
+							if n == 2
+								th(scope='col').column-hd-md=title
+							else if n > 3
+								th(scope='col').column-hd-sm=title
+							else
+								th(scope='col')=title
 							- n++
+				tbody
+					each s in selected
+						tr.clickable(data-href=s.link, data-type=type)
+							- var n = 1
+							each key in keys
+								if key
+									if n == 2
+										td.column-hd-md=s[key]
+									else if n > 3
+										td.column-hd-sm=s[key]
+									else
+										td=s[key]
+								- n++
 
 mixin overview-job-table(type,titles,selected,keys,measurements)
-	.table-responsive
-		table.table
-			thead
-				tr
-					- var n = 1
-					each title in titles
-						if n == 2
-							th(scope='col').column-hd-md=title
-						else if n > 3
-							th(scope='col').column-hd-sm=title
-						else
-							th(scope='col')=title
-						- n++
-			tbody
-				each s in selected
-					tr.overview-row
-						- var n = 0
-						each key in keys
-							if key
-								if n == 2
-									td.column-hd-md=s[key]
-								else if n > 3
-									td.column-hd-sm=s[key]
-								else
-									td=s[key]
-								- n++
-						td
-							a.btn.btn-secondary.btn-sm.row-button(href='/forms/'+s.link) skoða
-					tr.info-row(data-href=s.link)
-						- var span = titles.length+1
-						td(colspan=span).detail-cell
-							.container-fluid
-								.row
-									.col-12.col-no-padding
-										.table-responsive
-											table.table.detail-table
-												thead
-													tr
-														th(scope='col') Mæling
-														th(scope='col') Gildi
-														th(scope='col') Eining
-												tbody
-													each val,idx in s.measurements
-														if val
-															tr
-																td=val.identifier
-																td=val.value
-																td=val.unit
+	if selected.length == 0
+		.container-fluid.d-flex.justify-content-center.align-items-center.empty
+			.row
+				.col-md-10.offset-md-1
+					.card
+						.card-block
+							h4.card-title Engin verkefni
+							p.card-text Hér er engin verkefni að finna
+							p.card-text Viltu búa til nýtt verkefni?
+							button.float-right.right-button.btn.btn-primary(type='button', data-toggle='modal', data-target='#form-modal') 
+								i.fa.fa-plus.button-icon
+								| Ný skýrsla
+	else
+		.table-responsive
+			table.table
+				thead
+					tr
+						- var n = 1
+						each title in titles
+							if n == 2
+								th(scope='col').column-hd-md=title
+							else if n > 3
+								th(scope='col').column-hd-sm=title
+							else
+								th(scope='col')=title
+							- n++
+				tbody
+					each s in selected
+						tr.overview-row
+							- var n = 0
+							each key in keys
+								if key
+									if n == 2
+										td.column-hd-md=s[key]
+									else if n > 3
+										td.column-hd-sm=s[key]
+									else
+										td=s[key]
+									- n++
+							td
+								a.btn.btn-secondary.btn-sm.row-button(href='/forms/'+s.link) skoða
+						tr.info-row(data-href=s.link)
+							- var span = titles.length+1
+							td(colspan=span).detail-cell
+								.container-fluid
+									.row
+										.col-12.col-no-padding
+											.table-responsive
+												table.table.detail-table
+													thead
+														tr
+															th(scope='col') Mæling
+															th(scope='col') Gildi
+															th(scope='col') Eining
+													tbody
+														each val,idx in s.measurements
+															if val
+																tr
+																	td=val.identifier
+																	td=val.value
+																	td=val.unit

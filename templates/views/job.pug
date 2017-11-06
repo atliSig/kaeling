@@ -45,7 +45,6 @@ block content
 														p.card-text Það hafa ekki verið gerðar neinar skýrslur fyrir þetta verkefni.
 														p.card-text Viltu búa til nýja skýrslu fyrir þetta verkefni?
 														button.btn.btn-primary.float-right(role='button') Ný skýrsla
-
 	.container-fluid.endpoint-container
 		.row.endpoint-row
 			.col-xl-3.col-md-5.col-12.left-column
@@ -64,12 +63,13 @@ block content
 						button.float-right.right-button.btn.btn-primary(type='button', data-toggle='modal', data-target='#form-modal') 
 							i.fa.fa-plus.button-icon
 							| Ný skýrsla
-						a.btn.btn-secondary.float-right(href='edit/') Breyta verkefni
+						a.btn.btn-secondary.float-right.right-button(href='edit/') Breyta
+						a.btn.btn-danger.float-right(href='#' data-toggle='modal', data-target='#delete-modal') Eyða
 					.col-12
 						hr
 					.col-12
-						a.btn.btn-danger.float-right(href='delete/') Eyða verkefni
-							
+						
+						
 			.col-xl-9.col-md-7.col-12.table-column
 				if selected.length!=0
 					+overview-job-table(type,titles,selected,keys)
@@ -85,3 +85,5 @@ block content
 										button.float-right.right-button.btn.btn-primary(type='button', data-toggle='modal', data-target='#form-modal') 
 											i.fa.fa-plus.button-icon
 											| Ný skýrsla
+block modals
+	+deleteModal(job.name)

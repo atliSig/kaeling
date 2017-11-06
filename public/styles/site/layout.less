@@ -28,7 +28,6 @@
 	background-color:rgba(0, 0, 0, 0.015);
 	border-right: 1px solid rgba(0, 0, 0, 0.09);
 	padding:20px;
-	min-height: 100%;
 }
 
 .endpoint-container{
@@ -140,6 +139,14 @@
 .detail-table{
 	margin-bottom: 0 !important;	
 }
+
+.index-container{
+	min-height: ~"calc(100vh - 100px)" !important;
+}
+
+.more-button{
+	display:none !important;
+}
 // Extra small devices (portrait phones, less than 576px)
 @media (max-width: 575px) { 
 	.column-hd-sm{
@@ -151,6 +158,13 @@
 @media (max-width: 767px) { 
 	.column-hd-md{
 		display:none;
+	}
+
+	.endpoint-row{
+		min-height:0;
+	}
+	.more-button{
+		display:block !important;
 	}
 }
 

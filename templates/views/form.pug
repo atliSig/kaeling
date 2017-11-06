@@ -20,7 +20,7 @@ block content
 			.col-12
 				hr
 			.col-12
-				a.btn.btn-danger.float-right.right-button(href='delete/') Eyða
+				a.btn.btn-danger.float-right.right-button(href='#' data-toggle='modal', data-target='#delete-modal') Eyða skýrslu
 				a.btn.btn-primary.float-right.right-button(href='edit/') Breyta
 				a.btn.btn-secondary.float-right(href='/jobs/'+form.job._id) Til baka
 			.col-12
@@ -81,3 +81,5 @@ block content
 				.col-md-6
 					p=form.diary
 
+block modals
+	+deleteModal(form.name)
