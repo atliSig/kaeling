@@ -1,4 +1,4 @@
-mixin overview-table(type,titles,selected,keys)
+mixin overview-table(type,selected,titles,keys)
 	if selected.length == 0
 		.container-fluid.d-flex.justify-content-center.align-items-center.empty
 			.col-sm-9.col-lg-6.col-lg-4
@@ -41,7 +41,7 @@ mixin overview-table(type,titles,selected,keys)
 							- n++
 				tbody
 					each s in selected
-						tr.clickable(data-href=s.link, data-type=type)
+						tr.clickable(data-href=s._id, data-type=type)
 							- var n = 1
 							each key in keys
 								if key
@@ -95,7 +95,7 @@ mixin overview-job-table(type,titles,selected,keys,measurements)
 									- n++
 							td
 								a.btn.btn-secondary.btn-sm.row-button(href='/forms/'+s.link) skoða
-						tr.info-row(data-href=s.link)
+						tr.info-row(data-href=s._id)
 							- var span = titles.length+1
 							td(colspan=span).detail-cell
 								.container-fluid

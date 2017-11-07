@@ -1,0 +1,22 @@
+{
+	"jobs":{
+		"type": "jobs",
+		"titles": ["Nafn", "Viðskiptavinur","Fært inn"],
+		"keys": ["name", "displayCustomer", "displayDate"]
+	},
+	"forms":{
+		"type": "forms",
+		"titles":["Nafn","Viðskiptavinur","Yfirverk","Fært inn"],
+		"keys":["name","displayCustomer","displayJob","displayDate"]
+	},
+	"customers":{
+		"type": "customers",
+		"titles":["Fyrirtæki","Staður","Fært inn"],
+		"keys":["name","location","displayDate"]
+	},
+	"upcoming":{
+		"type":"jobs",
+		"titles":["Nafn","Viðskiptavinur","Fært inn","Tímamörk"],
+		"keys": ["name","displayCustomer","displayDate","displayDeadline"]
+	}
+}

@@ -13,22 +13,9 @@ exports = module.exports = function (req, res) {
 	var locals = res.locals;
 	locals.section = 'jobs';
 
-	selected = [];
-	Object.keys(req.allJobs).forEach(function(key) {
-		selected.push({
-			'link':req.allJobs[key]._id,
-			'name':req.allJobs[key].name,
-			'customer':req.allJobs[key].customer.name,
-			'date':moment(req.allJobs[key].createdAt).format('MMM Do YY'),
-		});
-	});
-
 	view.render('overview',{
 		currentUser: req.user,
-		type:'jobs',
-		selected: selected,
-		titles:['Nafn','Viðskiptavinur','Fært inn'],
-		keys:[,'name','customer','date'],
+		selected:_.assign({values:req.allJobs}, require.main.require('config/tables.json').jobs),
 		help: require.main.require('config/help.json').jobs,
 		lists:_.pick(req.session, ['userList', 'customerList', 'jobList'])
 	})
