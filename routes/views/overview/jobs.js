@@ -5,35 +5,31 @@
 var keystone = require('keystone');
 var Form = keystone.list('Form');
 var moment = require('moment');
+var _ = require('lodash');
+require('rootpath')();
 exports = module.exports = function (req, res) {
 
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
 	locals.section = 'jobs';
-	helpTitle = 'Yfirlitssíða verkefna';
-	helpBody =
-		'Hér er hægt að nálgast öll verkefni sem eru skráð í kerfinu';
 
 	selected = [];
-	Object.keys(req.session.allJobs).forEach(function(key) {
+	Object.keys(req.allJobs).forEach(function(key) {
 		selected.push({
-			'link':req.session.allJobs[key]._id,
-			'name':req.session.allJobs[key].name,
-			'customer':req.session.allJobs[key].customer.name,
-			'date':moment(req.session.allJobs[key].createdAt).format('MMM Do YY'),
+			'link':req.allJobs[key]._id,
+			'name':req.allJobs[key].name,
+			'customer':req.allJobs[key].customer.name,
+			'date':moment(req.allJobs[key].createdAt).format('MMM Do YY'),
 		});
 	});
 
-	view.render('overview', {
+	view.render('overview',{
 		currentUser: req.user,
 		type:'jobs',
 		selected: selected,
 		titles:['Nafn','Viðskiptavinur','Fært inn'],
 		keys:[,'name','customer','date'],
-		users:req.session.allUsers,
-		customers:req.session.allCustomers,
-		jobs:req.session.allJobs,
-		helpBody:helpBody,
-		helpTitle:helpTitle
-	});
+		help: require.main.require('config/help.json').jobs,
+		lists:_.pick(req.session, ['userList', 'customerList', 'jobList'])
+	})
 };

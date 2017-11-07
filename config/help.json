@@ -1,0 +1,54 @@
+{
+	"index":{
+		"title":"Forsíðan þín",
+		"body":"Hér getur þú skoðað þau verkefni og skýrslur sem þú ert að vinna í. Ef það styttist í að það þurfi að gera skýrslu fyrir eitthvað ákveðið verkefni þá birtist verkefnið undir áríðandi verkefnum."
+	},
+	"customers":{
+		"title" : "yfirlitssíða viðskiptavina",
+		"body" : "Hér er hægt að nálgast alla viðskiptavini sem eru skráðir í kerfinu"
+	},
+	"forms":{
+		"title" : "Yfirlitssíða skýrslna",
+		"body" : "Hér er hægt að nálgast allar skýrslur sem eru skráðar í kerfinu"
+	},
+	"jobs":{
+		"title" : "Yfirlitssíða verkefna",
+		"body" : "Hér er hægt að nálgast öll verkefni sem eru skráð í kerfinu"
+	},
+	"users":{
+		"title" : "Yfirlitssíða starfsmanna",
+		"body" : "Hér er hægt að nálgast alla starfsmenn sem eru skráð í kerfinu"
+	},
+	"customer":{
+		"title" : "Yfirlitssíða viðskiptavinar",
+		"body" : "Hér er hægt að skoða allar helstu upplýsingar um viðskiptavinin og breyta upplýsingum ef þess þarf. Hér er einnig yfirlit yfir öll þau verkefni sem eru skráð á fyrirtækið."
+	},
+	"form":{
+		"title" : "Yfirlitssíða Skýrslu",
+		"body" : "Hér er hægt að skoða ákveðna skýrslu í þaula. Hér koma fram allar þær upplýsingar sem koma fram í þessari skýrslu. Hér er líka hægt að velja að breyta skýrslu"
+	},
+	"job":{
+		"title" :"Yfirlitssíða verkefnis",
+		"body" : "Hér er hægt að skoða upplýsingar um ákveðið verkefni. Hér að neðan er svo yfirlit yfir allar þær skýrslur sem eru skráðar á þetta verkefni"
+	},
+	"user":{
+		"title" : "Yfirlitssíða starfsmanns",
+		"body" : "Hér er hægt að skoða þær skýrslur og verkefni sem starfsmaður er skráður fyrir"
+	},
+	"customerEdit":{
+		"title" : "Breytingarsíða viðskiptavinar",
+		"body" : "Hér er hægt að gera nákvæmari breytingar á þeim upplýsingum sem eru skráð á viðeigandi fyrirtæki."
+	},
+	"formEdit":{
+		"title" : "Breytingarsíða Skýrslu",
+		"body" : "Hér er hægt að breyta skýrslunni og hvaða upplýsingar koma fram í henni"
+	},
+	"jobEdit":{
+		"title" : "Breytingarsíða verkefnis",
+		"body" : "Hér er hægt að breyta þeim upplýsingum sem eru skráð á þetta verkefni"
+	},
+	"userEdit":{
+		"title" : "Breytingarsíða starfsmanns",
+		"body" :  "Hér er hægt að breyta grunnupplýsingum um starsmann"
+	}
+}

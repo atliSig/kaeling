@@ -47,3 +47,21 @@ $('.overview-row').click(function(){
 $('.overview-row .row-button').click(function(e){
 	e.stopPropagation();
 });
+
+
+//Notification shower
+if($('#notification')){
+	$( "#notification" ).animate(
+		{ left: "20px"},
+		{ duration: 500}
+	);
+	setTimeout(function () {
+		$( "#notification" ).animate(
+			{ left: "-300px"}, 
+			{ duration: 500}
+		);
+		setTimeout(function(){
+			$('#notification').remove();
+		}, 1000);
+	}, 5000);
+};

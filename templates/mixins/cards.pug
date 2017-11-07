@@ -3,7 +3,7 @@ mixin customer-card(customer)
 		.card-header Viðskiptavinur
 		.card-block
 			h3.card-title=customer.name
-			p.card-text=customer.location.street1+', '+customer.location.suburb
+			p.card-text=customer.location
 			a.btn.btn-primary.btn-sm.float-right(href='/customers/'+customer._id+'/') skoða
 
 mixin job-card(job)

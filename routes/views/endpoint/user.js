@@ -4,13 +4,14 @@
 
 var keystone = require('keystone');
 var moment = require('moment');
+var _ = require('lodash');
+require('rootpath')();
 
 module.exports.get = function (req, res) {
 
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
-	helpTitle = 'Yfirlitssíða starfsmanns';
-	helpBody ='Hér er hægt að skoða þær skýrslur og verkefni sem starfsmaður er skráður fyrir';
+	
 	
 	jobSelected = [];
 	Object.keys(req.jobsByUser).forEach(function(key) {
@@ -42,28 +43,32 @@ module.exports.get = function (req, res) {
 		jobTitles:['Nafn','Viðskiptavinur','Fært inn'],
 		formKeys:['name','customer','job','date'],
 		formTitles:['Nafn','Viðskiptavinur','Yfirverk','Dagsetning'],
-		users:req.session.allUsers,
-		customers:req.session.allCustomers,
-		jobs:req.session.allJobs,
-		helpBody:helpBody,
-		helpTitle:helpTitle
+		help: require.main.require('config/help.json').user,
+		lists:_.pick(req.session, ['userList', 'customerList', 'jobList'])
 	});
 };
 
-module.exports.edit = function(req,res){
+module.exports.editGet = function(req,res){
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
-	helpTitle = 'Breytingarsíða starfsmanns';
-	helpBody =
-		'Hér er hægt að breyta grunnupplýsingum um starsmann';
-	view.render('edit/editUser', {
+	
+	view.render('edit/editUser',{
 		currentUser: req.user,
 		user:req.userById,
-		users:req.session.allUsers,
-		customers:req.session.allCustomers,
-		jobs:req.session.allJobs,
-		helpBody:helpBody,
-		helpTitle:helpTitle
+		help: require.main.require('config/help.json').userEdit,
+		lists:_.pick(req.session, ['userList', 'customerList', 'jobList'])
+	});
+}
+
+module.exports.editPost = function(req,res){
+	var view = new keystone.View(req, res);
+	var locals = res.locals;
+	view.render('edit/editUser',{
+		currentUser: req.user,
+		user:req.userById,
+		notification: {body:'Notanda var breytt', icon:'fa-check', type:'success'},
+		help: require.main.require('config/help.json').userEdit,
+		lists:_.pick(req.session, ['userList', 'customerList', 'jobList'])
 	});
 }
 

@@ -32,13 +32,16 @@ exports = module.exports = function (app) {
 	 * Overview routes
 	 */	
 	app.get('/jobs',
+		mw.getAllJobs,
 		routes.views.overview.jobs);
 	app.get('/customers',
+		mw.getAllCustomers,
 		routes.views.overview.customers);
 	app.get('/forms',
 		mw.getAllForms,
 		routes.views.overview.forms);
 	app.get('/users',
+		mw.getAllUsers,
 		routes.views.overview.users);
 
 	/**
@@ -67,37 +70,37 @@ exports = module.exports = function (app) {
 	app.post('/forms/:formId/edit',
 		mw.updateForm,
 		mw.getFormById,
-		routes.views.endpoint.form.edit);
+		routes.views.endpoint.form.editPost);
 	app.post('/jobs/:jobId/edit',
 		mw.updateJob,
 		mw.getJobById,
 		mw.setJobsSession,
-		routes.views.endpoint.job.edit);
+		routes.views.endpoint.job.editPost);
 	app.post('/customers/:customerId/edit',
 		mw.updateCustomer,
 		mw.setCustomersSession,
 		mw.getCustomerById,
-		routes.views.endpoint.customer.edit);
+		routes.views.endpoint.customer.editPost);
 	app.post('/users/:userId/edit',
 		mw.updateUser,
 		mw.setUsersSession,
 		mw.getUserById,
-		routes.views.endpoint.user.edit);
+		routes.views.endpoint.user.editPost);
 	/**
 	 * Edit routes
 	 */
 	app.get('/jobs/:jobId/edit',
 		mw.getJobById,
-		routes.views.endpoint.job.edit);
+		routes.views.endpoint.job.editGet);
 	app.get('/customers/:customerId/edit',
 		mw.getCustomerById,
-		routes.views.endpoint.customer.edit);
+		routes.views.endpoint.customer.editGet);
 	app.get('/users/:userId/edit',
 		mw.getUserById,
-		routes.views.endpoint.user.edit);
+		routes.views.endpoint.user.editGet);
 	app.get('/forms/:formId/edit',
 		mw.getFormById,
-		routes.views.endpoint.form.edit);
+		routes.views.endpoint.form.editGet);
 
 	/**
 	 * Create routes

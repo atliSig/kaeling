@@ -100,28 +100,33 @@ exports.getJobsByCurrentUser = function (req, res, next) {
  */
 exports.getAllJobs = function (req, res, next) {
 	Job.model.find().populate('customer').exec(function (err, jobs) {
-		req.session.allJobs = jobs;
+		req.allJobs = jobs;
 		next();
 	});
 }
 
-
-
 exports.getAllUsers = function (req, res, next) {
 	User.model.find().exec(function (err, users) {
-		req.session.allUsers = users;
+		req.allUsers = users;
 		next();
 	});
 }
 
 exports.getAllCustomers = function (req, res, next) {
 	Customer.model.find().exec(function (err, customers) {
-		req.session.allCustomers = customers;
+		req.allCustomers = customers;
 		next();
 	});
 }
 
 exports.getAllForms = function (req, res, next) {
+	var sort = {};
+	if(req.query.sort){
+		sort[req.query.sort] = req.query.order;
+	}else{
+		sort['createdAt'] = 1;
+	}
+	console.log(typeof sort[req.query.sort]);
 	Form.model.find()
 		.populate({
 			path: 'job',
@@ -132,6 +137,7 @@ exports.getAllForms = function (req, res, next) {
 			}
 		})
 		.populate('user')
+		.sort(sort)
 		.exec(function (err, forms) {
 			req.allForms = forms;
 			next();
@@ -153,6 +159,7 @@ exports.getJobsByUserId = function (req, res, next) {
 }
 
 exports.getJobById = function (req, res, next) {
+	console.log(req.url);
 	Job.model.findOne({ _id: req.params.jobId })
 		.populate('user')
 		.populate('customer')
@@ -353,7 +360,7 @@ exports.updateForm = function(req,res,next){
 /**
  * Session related
  */
-exports.setSession = function(req,res,next){
+/*exports.setSession = function(req,res,next){
 	if(_.isEmpty(req.session.allUsers) || _.isEmpty(req.session.allJobs) || _.isEmpty(req.session.allCustomers)){
 		Job.model.find().populate('customer').exec(function (err, jobs) {
 			req.session.allJobs = jobs;
@@ -368,25 +375,51 @@ exports.setSession = function(req,res,next){
 	}else{
 		next();
 	}
+}*/
+exports.setSession = function(req,res,next){
+	if(_.isEmpty(req.session.allUsers) || _.isEmpty(req.session.allJobs) || _.isEmpty(req.session.allCustomers)){
+		Job.model.find().select({_id: 1, name: 1}).exec(function (err, jobs) {
+			req.session.jobList = jobs;
+			User.model.find().select({_id: 1, name: 1}).exec(function (err, users) {
+				req.session.userList = users;
+				Customer.model.find().select({_id: 1, name: 1}).exec(function (err, customers) {
+					req.session.customerList = customers;
+					next();
+				});
+			});
+		});
+	}else{
+		next();
+	}
 }
 
+
 exports.setUsersSession = function(req,res,next){
-	User.model.find().exec(function (err, users) {
-		req.session.allUsers = users;
+	User.model
+		.find()
+		.select({_id: 1, name: 1})
+		.exec(function (err, users) {
+		req.session.userList = users;
 		next();
 	});
 }
 
 exports.setJobsSession = function(req,res,next){
-	Job.model.find().populate('customer').exec(function (err, jobs) {
-		req.session.allJobs = jobs;
+	Job.model
+		.find()
+		.select({_id: 1, name: 1})
+		.populate('customer').exec(function (err, jobs) {
+		req.session.jobList = jobs;
 		next();
 	});
 }
 
 exports.setCustomersSession = function(req,res,next){
-	Customer.model.find().exec(function (err, customers) {
-		req.session.allCustomers = customers;
+	Customer.model
+		.find()
+		.select({_id: 1, name: 1})
+		.exec(function (err, customers) {
+		req.session.customerList = customers;
 		next();
 	});
 }

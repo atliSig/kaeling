@@ -9,7 +9,8 @@
     "lodash": "^4.13.1",
     "moment": "^2.19.1",
     "node-sass-middleware": "^0.11.0",
-    "pug": "2.0.0-beta11"
+    "pug": "2.0.0-beta11",
+    "rootpath": "^0.1.2"
   },
   "devDependencies": {
     "eslint": "3.15.0",

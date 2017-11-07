@@ -8,20 +8,20 @@ mixin helpModal(title, textBody)
 					p=textBody
 				.modal-footer
 					button.btn.btn-secondary(type='button', data-dismiss='modal') Loka
-mixin formModal()
+mixin formModal(jobList, userList)
 	#form-modal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='form-modal', aria-hidden='true')
 		form(method='post' action='/create/forms')
 			.modal-dialog(role='document')
 				.modal-content
 					.modal-header
-						if jobs
+						if jobList
 							h5.modal-title Ný skýrsla
 						else
 							h5.modal-title Engin verkefni til
 						button.close(type='button', data-dismiss='modal', aria-label='loka')
 							span(aria-hidden='true') ×
 					.modal-body
-						if jobs
+						if jobList
 							.form-group
 								label(for='name') Nafn
 								input(name='name' type='text', placeholder='Nýtt nafn')#name.form-control
@@ -29,7 +29,7 @@ mixin formModal()
 								.col-6
 									label(for='user') Starfsmaður
 									select(name='user')#user.form-control
-										each user in users
+										each user in userList
 											if user._id == currentUser._id
 												option(value=user._id selected=true)=user.name
 											else
@@ -37,7 +37,7 @@ mixin formModal()
 								.col-6
 									label(for='job') Verkefni
 									select(name='job')#job.form-control
-										each j in jobs
+										each j in jobList
 											if job && j._id == job._id
 												option(value=j._id selected=true)=j.name
 											else
@@ -46,25 +46,25 @@ mixin formModal()
 							p Til að búa til skýrslu þarf fyrst að búa til verkefni.
 					.modal-footer
 						button.btn.btn-secondary(type='button', data-dismiss='modal') Loka
-						if jobs
+						if jobList
 							button.btn.btn-primary(type='submit') Vista
 						else
 							button.btn.btn-primary#new-job(type='button' data-dismiss='modal') Nýtt verkefni
 
-mixin jobModal()
+mixin jobModal(customerList, userList)
 	#job-modal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='job-modal', aria-hidden='true')
 		form(method='post' action='/create/jobs')
 			.modal-dialog(role='document')
 				.modal-content
 					.modal-header
-						if customers
+						if customerList
 							h5.modal-title Nýtt verkefni
 						else
 							h5.modal-title Engir viðskiptavinir til
 						button.close(type='button', data-dismiss='modal', aria-label='loka')
 							span(aria-hidden='true') ×
 					.modal-body
-						if customers
+						if customerList
 							.form-group
 								label(for='name') Nafn
 								input(name='name' type='text')#name.form-control
@@ -72,7 +72,7 @@ mixin jobModal()
 								.col-6
 									label(for='user') Eigandi verks
 									select(name='user')#user.form-control
-										each user in users
+										each user in userList
 											if user._id == currentUser._id
 												option(value=user._id selected=true)=user.name
 											else
@@ -80,7 +80,7 @@ mixin jobModal()
 								.col-6
 									label(for='customer') Viðskiptavinur
 									select(name='customer')#customer.form-control
-										each c in customers
+										each c in customerList
 											if customer && c._id == customer._id
 												option(value=c._id selected=true)=c.name
 											else
@@ -92,7 +92,7 @@ mixin jobModal()
 							p Til að búa til verkefni þarf fyrst að búa til viðskiptavin.
 					.modal-footer
 						button.btn.btn-secondary(type='button', data-dismiss='modal') Loka
-						if customers
+						if customerList
 							button.btn.btn-primary(type='submit') Vista
 						else
 							button.btn.btn-primary#new-customers(type='button') Nýr viðskiptavinur

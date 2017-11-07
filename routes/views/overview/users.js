@@ -4,33 +4,29 @@
 
 var keystone = require('keystone');
 var moment = require('moment');
+var _ = require('lodash');
+require('rootpath')();
 exports = module.exports = function (req, res) {
 
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
 	locals.section = 'users';
-	helpTitle = 'Yfirlitssíða starfsmanna';
-	helpBody =
-		'Hér er hægt að nálgast alla starfsmenn sem eru skráð í kerfinu';
 
 	selected = [];
-	Object.keys(req.session.allUsers).forEach(function(key) {
+	Object.keys(req.allUsers).forEach(function(key) {
 		selected.push({
-			'link':req.session.allUsers[key]._id,
-			'name':req.session.allUsers[key].name,
-			'email':req.session.allUsers[key].email,
-			'date':moment(req.session.allUsers[key].createdAt).format('MMM Do YY')});
+			'link':req.allUsers[key]._id,
+			'name':req.allUsers[key].name,
+			'email':req.allUsers[key].email,
+			'date':moment(req.allUsers[key].createdAt).format('MMM Do YY')});
 	});
-	view.render('overview', {
+	view.render('overview',{
 		currentUser: req.user,
 		type: 'users',
 		selected: selected,
 		titles:['Nafn', 'Póstur', 'Færður inn'],
 		keys:['name','email','date'],
-		users:req.session.allUsers,
-		customers:req.session.allCustomers,
-		jobs:req.session.allJobs,
-		helpBody:helpBody,
-		helpTitle:helpTitle
+		help: require.main.require('config/help.json').users,
+		lists:_.pick(req.session, ['userList', 'customerList', 'jobList'])
 	});
 };

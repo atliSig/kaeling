@@ -4,14 +4,15 @@
 
 var keystone = require('keystone');
 var moment = require('moment');
+var _ = require('lodash');
+require('rootpath')();
+
 exports = module.exports = function (req, res) {
 
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
 	locals.section = 'forms';
-	helpTitle = 'Yfirlitssíða skýrslna';
-	helpBody =
-		'Hér er hægt að nálgast allar skýrslur sem eru skráðar í kerfinu';
+	
 
 	selected = [];
 	Object.keys(req.allForms).forEach(function(key) {
@@ -29,12 +30,9 @@ exports = module.exports = function (req, res) {
 		currentUser: req.user,
 		type:'forms',
 		selected: selected,
-		titles:['nafn','Viðskiptavinur','Starfsmaður','Yfirverk','Dagsetning'],
+		titles:['Nafn','Viðskiptavinur','Starfsmaður','Yfirverk','Dagsetning'],
 		keys:['name','customer','user','job','date'],
-		users:req.session.allUsers,
-		customers:req.session.allCustomers,
-		jobs:req.session.allJobs,
-		helpBody:helpBody,
-		helpTitle:helpTitle
+		help: require.main.require('config/help.json').forms,
+		lists:_.pick(req.session, ['userList', 'customerList', 'jobList'])
 	});
 };

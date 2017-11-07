@@ -2,7 +2,6 @@ include ../mixins/info
 include ../mixins/modals
 doctype html
 html
-	//- HTML HEADER
 	head
 		meta(charset="utf-8")
 		meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
@@ -10,20 +9,13 @@ html
 
 		title= title || 'Kæling'
 		link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
-
-		//- Customise the stylesheet for your site by editing /public/styles/site.less
-		//- All .less files will be automatically compiled and minified in production.
 		link(href="/styles/site.min.css", rel="stylesheet")
 		link(href='/styles/bootstrap4/bootstrap.css', rel="stylesheet")
 		link(href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css", rel="stylesheet", integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN", crossorigin="anonymous")
-		//- This file provides the default styling for the KeystoneJS Content Editor
 		if user && user.canAccessKeystone
 			link(href="/keystone/styles/content/editor.min.css", rel="stylesheet")
 
-		//- Include template-specific stylesheets by extending the css block
 		block css
-
-		//- Add any other template-specific HEAD tags by extending the head block
 		block head
 
 	//- HTML BODY
@@ -46,9 +38,9 @@ html
 								i.fa.fa-question-circle.button-icon
 								| Hjálp	
 						li.nav-item.hide-desktop
-							a.nav-link(href='keystone') Umsjónarkerfi
+							a.nav-link(href='/keystone') Umsjónarkerfi
 						li.nav-item.hide-desktop
-							a.nav-link(href='keystone/signout') Skrá út
+							a.nav-link(href='/keystone/signout') Skrá út
 					a.btn.btn-outline-secondary.navbar-button.hide-mobile(href='keystone') Umsjónarkerfi
 					a.btn.btn-outline-secondary.navbar-button#signout.right-button.hide-mobile(href='keystone/signout') Skrá út
 					button.btn.btn-outline-secondary.navbar-button.hide-mobile.right-button(type='button', data-toggle='modal', data-target='#job-modal') 
@@ -71,53 +63,22 @@ html
 					
 		//- BODY
 		#body
-
-			//- NOTE:
-			//- There is no .container wrapping class around body blocks to allow more flexibility in design.
-			//- Remember to include it in your templates when you override the intro and content blocks!
-
-			//- The Intro block appears above flash messages (used for temporary information display)
 			block intro
-
-			//- Flash messages allow you to display once-off status messages to users, e.g. form
-			//- validation errors, success messages, etc.
 			//+info(message)
-			+formModal()
-			+jobModal()
-			+helpModal(helpTitle, helpBody)
+			+formModal(lists.jobList, lists.userList)
+			+jobModal(lists.customerList, lists.userList)
+			+helpModal(help.title, help.body)
 			block modals
-			//- The content block should contain the body of your template's content
 			block content
-		//.card.info-card.lg-w-25
-				.card-block
-					h4.card-title Card title
-					p.card-text
-						| Some quick example text to build on the card title and make up the bulk of the card's content.
-					a.btn.btn-primary(href='#') Go somewhere
-
-
 		//- FOOTER
 		//- #footer
-
-
+		if notification
+			+notificationCard(notification)
 		//- JAVASCRIPT
-
-		//- jQuery 1.11.3 is included by default, and required by both Bootstrap
-		//- and the KeystoneJS Content Editor. If you are not targeting IE8,
-		//- you can upgrade to 2.1.4 (also bundled) for better performance.
 		script(src='/js/jquery/jquery-1.11.3.min.js')
-
-		//- Customise which Bootstrap javascript files are served by including
-		//- them specifically here, instead of bootstrap-3.3.5.min.js
-		//- script(src='/js/bootstrap/bootstrap-3.3.5.min.js')
 		script(src='/js/bootstrap4/tether.min.js')
 		script(src='/js/bootstrap4/bootstrap.min.js')
-		//- The KeystoneJS Content Editor provides support for ks-editable data attributes,
-		//- which generate links to edit content for users who can access Keystone
 		if user && user.canAccessKeystone
 			script(src='/keystone/js/content/editor.js')
-
-		//- Add scripts that are globally required by your site here.
 		script(src='/js/main.js')
-		//- Include template-specific javascript files by extending the js block
 		block js

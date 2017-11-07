@@ -13,13 +13,13 @@ block content
 							label(for='user') Búið til af
 							select(name='user')#user.form-control
 								each user in users
-									if user._id.equals(customer.user._id)
+									if user._id == customer.user._id
 										option(value=user._id selected=true)=user.name
 									else
 										option(value=user._id)=user.name
 						.col-6
 							label(for='location') Staðsetning
-							input(name='location', type='text', value=customer.location.street1)#location.form-control
+							input(name='location', type='text', value=customer.location)#location.form-control
 
 					button.btn.btn-primary.float-right.right-button(type='submit') Breyta
 					a.btn.btn-secondary.float-right(href='../') Til baka

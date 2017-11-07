@@ -4,13 +4,12 @@
 
 var keystone = require('keystone');
 var moment = require('moment');
+var _ = require('lodash');
+require('rootpath')();
 module.exports.get = function (req, res) {
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
-	helpTitle = 'Yfirlitssíða verkefnis';
-	helpBody =
-		'Hér er hægt að skoða upplýsingar um ákveðið verkefni. Hér að neðan er svo'+
-		' yfirlit yfir allar þær skýrslur sem eru skráðar á þetta verkefni';
+	
 	selected = [];
 	Object.keys(req.formsByJob).forEach(function(key) {
 		var measurements = {};
@@ -29,35 +28,40 @@ module.exports.get = function (req, res) {
 			'measurements':measurements,
 		});
 	});
-	view.render('job', {
+	view.render('job',{
 		currentUser: req.user,
 		type: 'forms',
 		job: req.jobById, 
 		selected: selected,
 		titles:['Nafn','Starfsmaður','Dagsetning'],
 		keys:['name','user','date'],
-		users:req.session.allUsers,
-		customers:req.session.allCustomers,
-		jobs:req.session.allJobs,
-		helpBody:helpBody,
-		helpTitle:helpTitle
+		help: require.main.require('config/help.json').job,
+		lists:_.pick(req.session, ['userList', 'customerList', 'jobList'])
 	});
 };
 
-module.exports.edit = function(req,res){
+module.exports.editGet = function(req,res){
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
-	helpTitle = 'Breytingarsíða verkefnis';
-	helpBody =
-		'Hér er hægt að breyta þeim upplýsingum sem eru skráð á þetta verkefni';
+	
+	view.render('edit/editjob',{
+		currentUser: req.user,
+		job: req.jobById,
+		help: require.main.require('config/help.json').jobEdit,
+		lists:_.pick(req.session, ['userList', 'customerList', 'jobList'])
+	});
+}
+
+module.exports.editPost = function(req,res){
+	var view = new keystone.View(req, res);
+	var locals = res.locals;
+	
 	view.render('edit/editjob', {
 		currentUser: req.user,
 		job: req.jobById, 
-		users:req.session.allUsers,
-		customers:req.session.allCustomers,
-		jobs:req.session.allJobs,
-		helpBody:helpBody,
-		helpTitle:helpTitle
+		notification: {body:'Verkefni var breytt', icon:'fa-check', type:'success'},
+		help: require.main.require('config/help.json').jobEdit,
+		lists:_.pick(req.session, ['userList', 'customerList', 'jobList'])
 	});
 }
 
