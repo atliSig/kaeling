@@ -15,10 +15,10 @@ module.exports.get = function (req, res) {
 	
 	view.render('index', {
 		currentUser: req.user,
-		selectedForms :_.assign({ values: req.currentUserForms},tables.forms),
-		selectedJobs  :_.assign({ values: req.currentUserJobs},tables.jobs),
+		selectedForms :_.assign({ values: req.currentUserForms},tables.userForms),
+		selectedJobs  :_.assign({ values: req.currentUserJobs},tables.userJobs),
 		selectedUpcoming : _.assign({ values: req.upcomingJobs},tables.upcoming),
 		help: require.main.require('config/help.json').index,
-		lists:_.pick(req.session, ['userList', 'customerList', 'jobList'])
+		lists: req.session.lists
 	});
 };

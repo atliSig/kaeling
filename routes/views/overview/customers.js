@@ -16,6 +16,6 @@ exports = module.exports = function (req, res) {
 		currentUser: req.user,
 		selected:_.assign({values:req.allCustomers}, require.main.require('config/tables.json').customers),
 		help: require.main.require('config/help.json').customers,
-		lists:_.pick(req.session, ['userList', 'customerList', 'jobList'])
+		lists: req.session.lists
 	});
 };

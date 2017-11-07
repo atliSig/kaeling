@@ -10,26 +10,14 @@ module.exports.get = function (req, res) {
 
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
-	selected = [];
-	Object.keys(req.jobsByCustomer).forEach(function(key) {
-		selected.push({
-			'link':req.jobsByCustomer[key]._id,
-			'name':req.jobsByCustomer[key].name,
-			'user':req.jobsByCustomer[key].user.name,
-			'date':moment(req.jobsByCustomer[key].createdAt).format("MMM Do YY"),
-			});
-	});
-
-	view.render('customer', _.assign({
+	
+	view.render('customer',{
 		currentUser: req.user,
-		type:'jobs',
 		customer: req.customerById,
-		selected:selected,
-		titles:['Nafn', 'Eigandi','Dagsetning'],
-		keys:['name','user','date'],
+		selected:_.assign({values:req.jobsByCustomer}, require.main.require('config/tables.json').jobs),
 		help: require.main.require('config/help.json').customer,
-		},_.pick(req.session, ['userList', 'customerList', 'jobList']))
-	);
+		lists: req.session.lists
+	});
 };
 
 module.exports.editGet = function(req,res){
@@ -39,7 +27,7 @@ module.exports.editGet = function(req,res){
 		currentUser: req.user,
 		customer: req.customerById, 
 		help: require.main.require('config/help.json').customerEdit,
-		lists:_.pick(req.session, ['userList', 'customerList', 'jobList'])
+		lists: req.session.lists
 	});
 }
 
@@ -49,12 +37,9 @@ module.exports.editPost = function(req,res){
 	view.render('edit/editcustomer',{
 		currentUser: req.user,
 		customer: req.customerById, 
-		users:req.session.allUsers,
-		customers:req.session.allCustomers,
-		jobs:req.session.allJobs,
 		help: require.main.require('config/help.json').customerEdit,
-		notification: {body:'Viðskiptavini var breytt', icon:'fa-check', type:'success'},
-		lists: _.pick(req.session, ['userList', 'customerList', 'jobList'])
+		lists: req.session.lists,
+		notification: {body:'Viðskiptavini var breytt', icon:'fa-check', type:'success'}
 	});
 }
 

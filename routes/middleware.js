@@ -107,9 +107,10 @@ exports.getJobsByCurrentUser = function (req, res, next) {
  * consider pagination here later
  */
 exports.getAllJobs = function (req, res, next) {
-	Job.model.find().populate('customer').exec(function (err, jobs) {
+	Job.model.find().populate('customer').populate('user').exec(function (err, jobs) {
 		Object.keys(jobs).forEach(function(key) {
 			jobs[key].displayCustomer = jobs[key].customer.name;
+			jobs[key].displayUser = jobs[key].user.name;
 			jobs[key].displayDate = moment(jobs[key].createdAt).format('MMM Do YY');
 		});
 		req.allJobs = jobs;
@@ -119,15 +120,19 @@ exports.getAllJobs = function (req, res, next) {
 
 exports.getAllUsers = function (req, res, next) {
 	User.model.find().exec(function (err, users) {
+		Object.keys(users).forEach(function (key) {
+			users[key].displayDate = moment(users[key].createdAt).format("MMM Do YY");
+		});
 		req.allUsers = users;
 		next();
 	});
 }
 
 exports.getAllCustomers = function (req, res, next) {
-	Customer.model.find().exec(function (err, customers) {
+	Customer.model.find().populate('user').exec(function (err, customers) {
 		Object.keys(customers).forEach(function (key) {
 			customers[key].displayDate = moment(customers[key].createdAt).format("MMM Do YY");
+			customers[key].displayUser = customers[key].user.name;
 		});
 		req.allCustomers = customers;
 		next();
@@ -157,6 +162,7 @@ exports.getAllForms = function (req, res, next) {
 				forms[key].displayCustomer = forms[key].job.customer.name;
 				forms[key].displayDate = moment(forms[key].createdAt).format('MMM Do YY'),
 				forms[key].displayJob = forms[key].job.name;
+				forms[key].displayUser = forms[key].user.name;
 			});
 			req.allForms = forms;
 			next();
@@ -172,13 +178,16 @@ exports.getJobsByUserId = function (req, res, next) {
 		.populate('user')
 		.populate('customer')
 		.exec(function (err, jobs) {
+			Object.keys(jobs).forEach(function(key) {
+				jobs[key].displayCustomer = jobs[key].customer.name;
+				jobs[key].displayDate = moment(jobs[key].createdAt).format('MMM Do YY');
+			});
 			req.jobsByUser = jobs;
 			next();
 		});
 }
 
 exports.getJobById = function (req, res, next) {
-	console.log(req.url);
 	Job.model.findOne({ _id: req.params.jobId })
 		.populate('user')
 		.populate('customer')
@@ -212,6 +221,8 @@ exports.getFormById = function (req, res, next) {
 		})
 		.populate('user')
 		.exec(function (err, form) {
+			form.formDate = moment(form.createdAt).format("YYYY-MM-DD");
+			form.displayDate = moment(form.createdAt).format("MMM Do YY");
 			req.formById = form;
 			next();
 		});
@@ -242,6 +253,10 @@ exports.getFormsByJobId = function (req, res, next) {
 		})
 		.populate('user')
 		.exec(function (err, forms) {
+			Object.keys(forms).forEach(function(key) {
+				forms[key].displayDate = moment(forms[key]).format("MMM Do YY");
+				forms[key].displayUser = forms[key].user.name;
+			});
 			req.formsByJob = forms;
 			next();
 		});
@@ -258,6 +273,11 @@ exports.getFormsByUserId = function (req, res, next) {
 			}
 		})
 		.exec(function (err, forms) {
+			Object.keys(forms).forEach(function(key) {
+				forms[key].displayCustomer = forms[key].job.customer.name;
+				forms[key].displayDate = moment(forms[key].createdAt).format('MMM Do YY'),
+				forms[key].displayJob = forms[key].job.name;
+			});
 			req.formsByUser = forms;
 			next();
 		});
@@ -268,6 +288,10 @@ exports.getJobsByCustomerId = function(req,res,next){
 		.find({customer:req.params.customerId})
 		.populate('user')
 		.exec(function (err, jobs) {
+			Object.keys(jobs).forEach(function(key) {
+				jobs[key].displayUser = jobs[key].user.name;
+				jobs[key].displayDate = moment(jobs[key].createdAt).format('MMM Do YY');
+			});
 			req.jobsByCustomer = jobs;
 			next();
 		});
@@ -383,13 +407,14 @@ exports.updateForm = function(req,res,next){
  * Session related
  */
 exports.setSession = function(req,res,next){
-	if(_.isEmpty(req.session.allUsers) || _.isEmpty(req.session.allJobs) || _.isEmpty(req.session.allCustomers)){
+	if(_.isEmpty(req.session.lists)){
+		req.session.lists = {};
 		Job.model.find().select({_id: 1, name: 1}).exec(function (err, jobs) {
-			req.session.jobList = jobs;
+			req.session.lists.jobList = jobs;
 			User.model.find().select({_id: 1, name: 1}).exec(function (err, users) {
-				req.session.userList = users;
+				req.session.lists.userList = users;
 				Customer.model.find().select({_id: 1, name: 1}).exec(function (err, customers) {
-					req.session.customerList = customers;
+					req.session.lists.customerList = customers;
 					next();
 				});
 			});
@@ -405,7 +430,7 @@ exports.setUsersSession = function(req,res,next){
 		.find()
 		.select({_id: 1, name: 1})
 		.exec(function (err, users) {
-		req.session.userList = users;
+		req.session.lists.userList = users;
 		next();
 	});
 }
@@ -415,7 +440,7 @@ exports.setJobsSession = function(req,res,next){
 		.find()
 		.select({_id: 1, name: 1})
 		.populate('customer').exec(function (err, jobs) {
-		req.session.jobList = jobs;
+		req.session.lists.jobList = jobs;
 		next();
 	});
 }
@@ -425,7 +450,7 @@ exports.setCustomersSession = function(req,res,next){
 		.find()
 		.select({_id: 1, name: 1})
 		.exec(function (err, customers) {
-		req.session.customerList = customers;
+		req.session.lists.customerList = customers;
 		next();
 	});
 }

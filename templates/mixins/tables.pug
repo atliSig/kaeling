@@ -53,7 +53,7 @@ mixin overview-table(type,selected,titles,keys)
 										td=s[key]
 								- n++
 
-mixin overview-job-table(type,titles,selected,keys,measurements)
+mixin overview-job-table(type,selected,titles,keys)
 	if selected.length == 0
 		.container-fluid.d-flex.justify-content-center.align-items-center.empty
 			.row
@@ -94,8 +94,8 @@ mixin overview-job-table(type,titles,selected,keys,measurements)
 										td=s[key]
 									- n++
 							td
-								a.btn.btn-secondary.btn-sm.row-button(href='/forms/'+s.link) skoða
-						tr.info-row(data-href=s._id)
+								a.btn.btn-secondary.btn-sm.row-button(href='/forms/'+s._id) skoða
+						tr.info-row
 							- var span = titles.length+1
 							td(colspan=span).detail-cell
 								.container-fluid
@@ -110,7 +110,7 @@ mixin overview-job-table(type,titles,selected,keys,measurements)
 															th(scope='col') Eining
 													tbody
 														each val,idx in s.measurements
-															if val
+															if typeof val === 'object' && 'isMeasurement' in val
 																tr
 																	td=val.identifier
 																	td=val.value

@@ -13,7 +13,12 @@ block content
 					.col-12
 						.card
 							.card-block
-								p.card-text='Hefur unnið að '+count+' skýrslum'
+								p.card-text='Hefur unnið að '+Object.keys(forms.values).length+' skýrslum'
+						hr
+					.col-12
+						.card
+							.card-block
+								p.card-text='Er eigandi '+Object.keys(jobs.values).length+' verkefna'
 						hr
 					.col-12
 							a.btn.btn-primary.float-right(href='edit/') Breyta Notanda
@@ -32,8 +37,8 @@ block content
 								.tab-pane.active#forms(role='tabpanel')
 									.row
 										.col-12.col-no-padding.index-container
-											+overview-table('forms',formTitles,formSelected,formKeys)
+											+overview-table(forms.type,forms.values,forms.titles,forms.keys)
 								.tab-pane#jobs(role='tabpanel')
 									.row
 										.col-12.col-no-padding.index-container
-											+overview-table('jobs',jobTitles,jobSelected,jobKeys)
+											+overview-table(jobs.type,jobs.values,jobs.titles,jobs.keys)

@@ -12,7 +12,7 @@ block content
 						.col-6
 							label(for='user') Búið til af
 							select(name='user')#user.form-control
-								each user in users
+								each user in lists.userList
 									if user._id == customer.user._id
 										option(value=user._id selected=true)=user.name
 									else

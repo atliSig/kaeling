@@ -4,14 +4,8 @@ $('.table > tbody > tr.clickable').click(function() {
 
 $('#change-form').click(function(){
 	var attributes = {};
-	var measurements = {};
-	var count = $('#nAttributes').val();
-	for(var i=1; i<=count; i++){
+	for(var i=1; i<=$('.isOk').length; i++){
 		attributes['at'+i] = {};
-	}
-	var count = $('#nMeasurements').val();
-	for(var i=1; i<=count; i++){
-		measurements['m'+i] = {};
 	}
 	$('.isOk').each(function(){
 		attributes[$(this).data('key')].isOk = $(this).is(":checked");
@@ -22,6 +16,11 @@ $('#change-form').click(function(){
 	$('.comment').each(function(){
 		attributes[$(this).data('key')].comment = $(this).val();
 	});
+
+	var measurements = {};
+	for(var i=1; i<=$('.measurement').length; i++){
+		measurements['m'+i] = {};
+	}
 	$('.measurement').each(function(){
 		measurements[$(this).data('key')] = {
 			'identifier': $(this).data('identifier'),

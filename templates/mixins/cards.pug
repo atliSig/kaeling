@@ -12,7 +12,7 @@ mixin job-card(job)
 		.card-block
 			h3.card-title=job.name
 			p.card-text=job.user.name
-			a.btn.btn-primary.btn-sm.float-right(href='/jobs/'+jobs._id+'/') skoða
+			a.btn.btn-primary.btn-sm.float-right(href='/jobs/'+job._id+'/') skoða
 
 mixin user-card(user)
 	.card

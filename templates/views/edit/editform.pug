@@ -15,7 +15,7 @@ block content
 						.col-6
 							label(for='user') Starfsmaður
 							select(name='user')#user.form-control
-								each user in users
+								each user in lists.userList
 									if user._id==form.user._id
 										option(value=user._id selected=true)=user.name
 									else
@@ -23,7 +23,7 @@ block content
 						.col-6
 							label(for='job') Verkefni
 							select(name='job')#job.form-control
-								each job in jobs
+								each job in lists.jobList
 									if job._id==form.job._id
 										option(value=job._id selected=true)=job.name
 									else
@@ -35,12 +35,13 @@ block content
 						.col-12
 							h4 Mælingar
 							.row
-								each val,idx in measurements
-									.col-md-6.col-12.form-group
-										label=val.identifier
-										.input-group
-											input(type='number', value=val.value, step=0.1, min="0" data-key=idx, data-identifier=val.identifier, data-unit=val.unit).form-control.measurement
-											span.input-group-addon=val.unit
+								each val,idx in form.measurements
+									if typeof val === 'object' && 'isMeasurement' in val
+										.col-md-6.col-12.form-group
+											label=val.identifier
+											.input-group
+												input(type='number', value=val.value, step=0.1, min="0" data-key=idx, data-identifier=val.identifier, data-unit=val.unit).form-control.measurement
+												span.input-group-addon=val.unit
 					.form-group.row
 						.col-12
 								h4 Annað
@@ -50,30 +51,29 @@ block content
 									| Sýna nánar
 							#attributes.collapse
 								.card.card-block.attribute-card
-									input#nAttributes(type='hidden', name='nAttributes', value=attributeCount)
-									input#nMeasurements(type='hidden', name='nMeasurements', value=measurementCount)
 									input#attributes(type='hidden',name='attributes')
 									input#measurements(type='hidden',name='measurements')
 									.row
-										each val,idx in attributes
-											.col-md-6.col-12.attribute-column
-												.card.card-block
-													.row
-														.col-md-3.col-12
-															b=val.identifier
-														.col-md-9.col-12
-															.form-check.form-check-inline.float-right
-																label.custom-control.custom-checkbox.form-check-label
-																	input.custom-control-input.form-check-input.isOk(type='checkbox' checked=val.isOk data-key=idx)
-																	span.custom-control-indicator
-																	span.custom-control-description Í lagi
-															.form-check.form-check-inline.float-right
-																label.custom-control.custom-checkbox.form-check-label
-																	input.custom-control-input.form-check-input.isFixed(type='checkbox' checked=val.isFixed data-key=idx)
-																	span.custom-control-indicator
-																	span.custom-control-description Viðgert
-														.col-md-9.col-12
-															textarea.form-control.comment(rows='1', placeholder='Athugasemd...', data-key=idx)=val.comment
+										each val,idx in form.checks
+											if typeof val === 'object' && 'isAttribute' in val
+												.col-md-6.col-12.attribute-column
+													.card.card-block
+														.row
+															.col-md-3.col-12
+																b=val.identifier
+															.col-md-9.col-12
+																.form-check.form-check-inline.float-right
+																	label.custom-control.custom-checkbox.form-check-label
+																		input.custom-control-input.form-check-input.isOk(type='checkbox' checked=val.isOk data-key=idx)
+																		span.custom-control-indicator
+																		span.custom-control-description Í lagi
+																.form-check.form-check-inline.float-right
+																	label.custom-control.custom-checkbox.form-check-label
+																		input.custom-control-input.form-check-input.isFixed(type='checkbox' checked=val.isFixed data-key=idx)
+																		span.custom-control-indicator
+																		span.custom-control-description Viðgert
+															.col-md-9.col-12
+																textarea.form-control.comment(rows='1', placeholder='Athugasemd...', data-key=idx)=val.comment
 					.form-group
 						label(for='diary') Dagbók
 						textarea(name='diary', rows='3')#diary.form-control=form.diary

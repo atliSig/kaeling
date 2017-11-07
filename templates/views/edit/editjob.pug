@@ -12,7 +12,7 @@ block content
 						.col-md-6.col-12
 							label(for='user') Eigandi verks
 							select(name='user')#user.form-control
-								each user in users
+								each user in lists.userList
 									if user._id == job.user._id
 										option(value=user._id selected=true)=user.name
 									else
@@ -20,7 +20,7 @@ block content
 						.col-md-6.col-12
 							label(for='customer') Viðskiptavinur
 							select(name='customer')#customer.form-control
-								each customer in customers
+								each customer in lists.customerList
 									if customer._id == job.customer._id
 										option(value=customer._id selected=true)=customer.name
 									else

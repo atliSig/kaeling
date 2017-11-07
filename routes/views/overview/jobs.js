@@ -12,11 +12,11 @@ exports = module.exports = function (req, res) {
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
 	locals.section = 'jobs';
-
+	console.log(req.allJobs);
 	view.render('overview',{
 		currentUser: req.user,
 		selected:_.assign({values:req.allJobs}, require.main.require('config/tables.json').jobs),
 		help: require.main.require('config/help.json').jobs,
-		lists:_.pick(req.session, ['userList', 'customerList', 'jobList'])
+		lists: req.session.lists
 	})
 };

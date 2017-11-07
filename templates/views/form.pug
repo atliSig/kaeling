@@ -35,11 +35,12 @@ block content
 							th(scope='col') Gildi
 							th(scope='col') Eining
 					tbody
-						each val,idx in measurements
-							tr
-								td=val.identifier
-								td=val.value
-								td=val.unit
+						each val,idx in form.measurements
+							if typeof val === 'object' && 'isMeasurement' in val
+								tr
+									td=val.identifier
+									td=val.value
+									td=val.unit
 			.col-12
 				a.btn.btn-secondary.float-right(data-toggle='collapse', href='#attributes', aria-expanded='false', aria-controls='attributes')
 						| Sýna meira
@@ -50,31 +51,32 @@ block content
 							table.table
 								thead
 									tr
-										each title in titles
+										each title in ['Nafn','Í lagi','Viðgert','Athugasemd']
 											if title=='Athugasemd'
 												th.card-table-head.column-hd-sm(scope='col')=title
 											else
 												th.card-table-head(scope='col')=title
 								tbody
-									each val,idx in attributes
-										tr
-											td=val.identifier
-											if val.isOk
-												td
-													i.fa.fa-check
-											else
-												td
-													i.fa.fa-times
-											if val.isFixed
-												td
-													i.fa.fa-check
-											else
-												td
-													i.fa.fa-times
-											if val.comment
-												td.column-hd-sm=val.comment
-											else
-												td.column-hd-sm Engin athugasemd
+									each val,idx in form.checks
+										if typeof val === 'object' && 'isAttribute' in val
+											tr
+												td=val.identifier
+												if val.isOk
+													td
+														i.fa.fa-check
+												else
+													td
+														i.fa.fa-times
+												if val.isFixed
+													td
+														i.fa.fa-check
+												else
+													td
+														i.fa.fa-times
+												if val.comment
+													td.column-hd-sm=val.comment
+												else
+													td.column-hd-sm Engin athugasemd
 			if form.diary
 				.col-12
 					h4 Dagbók
