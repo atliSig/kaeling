@@ -6,6 +6,7 @@ var keystone = require('keystone');
 var moment = require('moment');
 var _ = require('lodash');
 require('rootpath')();
+
 module.exports.get = function (req, res) {
 
 	var view = new keystone.View(req, res);

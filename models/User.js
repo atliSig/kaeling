@@ -46,4 +46,5 @@ User.schema.virtual('canAccessKeystone').get(function () {
  * Registration
  */
 User.defaultColumns = 'name, email, isAdmin';
+User.defaultSort ='name';
 User.register();

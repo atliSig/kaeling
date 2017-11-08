@@ -1,4 +1,4 @@
-mixin overview-table(type,selected,titles,keys)
+mixin overview-table(type,selected,titles,keys, pagination, db)
 	if selected.length == 0
 		.container-fluid.d-flex.justify-content-center.align-items-center.empty
 			.col-sm-9.col-lg-6.col-lg-4
@@ -30,15 +30,21 @@ mixin overview-table(type,selected,titles,keys)
 			table.table.table-hover
 				thead
 					tr
-						- var n = 1
-						each title in titles
-							if n == 2
-								th(scope='col').column-hd-md=title
-							else if n > 3
-								th(scope='col').column-hd-sm=title
+						each title, idx in titles
+							if pagination
+								th(scope='col').column-hd-md
+									- var setSort = 1
+									if(db[idx]==pagination.active && pagination.sort == 1)
+										- setSort = -1
+									a(href="?active="+db[idx]+"&sort="+setSort)=title
+									if(db[idx] == pagination.active)
+										if(pagination.sort == 1)
+											i.fa.fa-arrow-down.title-icon
+										else
+											i.fa.fa-arrow-up.title-icon
 							else
-								th(scope='col')=title
-							- n++
+								th(scope='col').column-hd-md=title
+
 				tbody
 					each s in selected
 						tr.clickable(data-href=s._id, data-type=type)

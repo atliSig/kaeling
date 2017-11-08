@@ -83,6 +83,7 @@ exports.getFormsByCurrentUser = function (req, res, next) {
 				forms[key].displayCustomer = forms[key].job.customer.name;
 				forms[key].displayDate = moment(forms[key].createdAt).format('MMM Do YY'),
 				forms[key].displayJob = forms[key].job.name;
+				forms[key].displayUser = forms[key].user.name;
 			});
 			req.currentUserForms = forms;
 			next();
@@ -96,6 +97,7 @@ exports.getJobsByCurrentUser = function (req, res, next) {
 			Object.keys(jobs).forEach(function(key) {
 				jobs[key].displayCustomer = jobs[key].customer.name;
 				jobs[key].displayDate = moment(jobs[key].createdAt).format('MMM Do YY');
+				jobs[key].displayUser = jobs[key].user.name;
 			});
 			req.currentUserJobs = jobs;
 			next();
@@ -107,45 +109,69 @@ exports.getJobsByCurrentUser = function (req, res, next) {
  * consider pagination here later
  */
 exports.getAllJobs = function (req, res, next) {
-	Job.model.find().populate('customer').populate('user').exec(function (err, jobs) {
-		Object.keys(jobs).forEach(function(key) {
-			jobs[key].displayCustomer = jobs[key].customer.name;
-			jobs[key].displayUser = jobs[key].user.name;
-			jobs[key].displayDate = moment(jobs[key].createdAt).format('MMM Do YY');
+	var skip = 0;
+	var sort = {};
+	if(req.query.skip){ skip = parseInt(req.query.skip)};
+	if(req.query.active){ sort[req.query.active] = req.query.sort};
+	Job.model.find()
+		.populate('customer').populate('user')
+		.sort(sort)
+		.skip(skip)
+		.limit(30)
+		.exec(function (err, jobs) {
+			Object.keys(jobs).forEach(function(key) {
+				jobs[key].displayCustomer = jobs[key].customer.name;
+				jobs[key].displayUser = jobs[key].user.name;
+				jobs[key].displayDate = moment(jobs[key].createdAt).format('MMM Do YY');
+			});
+			req.allJobs = jobs;
+			next();
 		});
-		req.allJobs = jobs;
-		next();
-	});
 }
 
 exports.getAllUsers = function (req, res, next) {
-	User.model.find().exec(function (err, users) {
-		Object.keys(users).forEach(function (key) {
-			users[key].displayDate = moment(users[key].createdAt).format("MMM Do YY");
+	var skip = 0;
+	var sort = {};
+	if(req.query.skip){ skip = parseInt(req.query.skip)};
+	if(req.query.active){ sort[req.query.active] = req.query.sort};
+	User.model.find()
+		.sort(sort)
+		.skip(skip)
+		.limit(30)
+		.exec(function (err, users) {
+			Object.keys(users).forEach(function (key) {
+				users[key].displayDate = moment(users[key].createdAt).format("MMM Do YY");
+			});
+			req.allUsers = users;
+			next();
 		});
-		req.allUsers = users;
-		next();
-	});
 }
 
 exports.getAllCustomers = function (req, res, next) {
-	Customer.model.find().populate('user').exec(function (err, customers) {
-		Object.keys(customers).forEach(function (key) {
-			customers[key].displayDate = moment(customers[key].createdAt).format("MMM Do YY");
-			customers[key].displayUser = customers[key].user.name;
+	var skip = 0;
+	var sort = {};
+	if(req.query.skip){ skip = parseInt(req.query.skip)};
+	if(req.query.active){ sort[req.query.active] = req.query.sort};
+	Customer.model.find()
+		.populate('user')
+		.sort(sort)
+		.skip(skip)
+		.limit(30)
+		.exec(function (err, customers) {
+			Object.keys(customers).forEach(function (key) {
+				customers[key].displayDate = moment(customers[key].createdAt).format("MMM Do YY");
+				customers[key].displayUser = customers[key].user.name;
+			});
+			req.allCustomers = customers;
+			next();
 		});
-		req.allCustomers = customers;
-		next();
-	});
 }
 
 exports.getAllForms = function (req, res, next) {
+	var skip = 0;
 	var sort = {};
-	if(req.query.sort){
-		sort[req.query.sort] = req.query.order;
-	}else{
-		sort['createdAt'] = 1;
-	}
+	if(req.query.skip){ skip = parseInt(req.query.skip)};
+	if(req.query.active){ sort[req.query.active] = req.query.sort};
 	Form.model.find()
 		.populate({
 			path: 'job',
@@ -157,6 +183,8 @@ exports.getAllForms = function (req, res, next) {
 		})
 		.populate('user')
 		.sort(sort)
+		.skip(skip)
+		.limit(30)
 		.exec(function (err, forms) {
 			Object.keys(forms).forEach(function(key) {
 				forms[key].displayCustomer = forms[key].job.customer.name;
@@ -256,6 +284,7 @@ exports.getFormsByJobId = function (req, res, next) {
 			Object.keys(forms).forEach(function(key) {
 				forms[key].displayDate = moment(forms[key]).format("MMM Do YY");
 				forms[key].displayUser = forms[key].user.name;
+				forms[key].displayCustomer = forms[key].job.customer.name;
 			});
 			req.formsByJob = forms;
 			next();

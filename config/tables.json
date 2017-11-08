@@ -7,31 +7,37 @@
 	"userForms":{
 		"type": "forms",
 		"titles":["Nafn","Viðskiptavinur","Yfirverk","Fært inn"],
-		"keys":["name","displayCustomer","displayJob","displayDate"]
+		"keys":["name","displayCustomer","displayJob","displayDate"],
+		"db":["name","customer","job","user","createdAt"]
 	},
 	"upcoming":{
 		"type":"jobs",
 		"titles":["Nafn","Viðskiptavinur","Fært inn","Tímamörk"],
-		"keys": ["name","displayCustomer","displayDate","displayDeadline"]
+		"keys": ["name","displayCustomer","displayDate","displayDeadline"],
+		"db":["name","customer","createdAt","createdAt"]
 	},
 	"customers":{
 		"type": "customers",
 		"titles":["Fyrirtæki","Staður","Starfsmaður","Fært inn"],
-		"keys":["name","location","displayUser","displayDate"]
+		"keys":["name","location","displayUser","displayDate"],
+		"db":["name","location","user","createdAt"]
 	},
 	"forms":{
 		"type": "forms",
 		"titles":["Nafn","Viðskiptavinur","Yfirverk","Starfsmaður","Fært inn"],
-		"keys":["name","displayCustomer","displayJob","displayUser","displayDate"]
+		"keys":["name","displayCustomer","displayJob","displayUser","displayDate"],
+		"db":["name","customer","job","user","createdAt"]
 	},
 	"jobs":{
 		"type":"jobs",
-		"titles":["Nafn", "Viðskiptavinur","Starfsmaður","Dagsetning"],
-		"keys":["name","displayCustomer","displayUser","displayDate"]
+		"titles":["Nafn", "Viðskiptavinur","Starfsmaður","Fært inn"],
+		"keys":["name","displayCustomer","displayUser","displayDate"],
+		"db":["name","customer","user","createdAt"]
 	},
 	"users":{
 		"type":"users",
 		"titles":["Nafn", "Póstur", "Færður inn"],
-		"keys":["name","email","displayDate"]
+		"keys":["name","email","displayDate"],
+		"db":["name","email","createdAt"]
 	}
 }

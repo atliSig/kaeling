@@ -19,12 +19,12 @@ block content
 					.tab-pane.active#forms(role='tabpanel')
 						.row
 							.col-12.col-no-padding.index-container
-								+overview-table(selectedForms.type,selectedForms.values, selectedForms.titles, selectedForms.keys)
+								+overview-table(selectedForms.type,selectedForms.values, selectedForms.titles, selectedForms.keys, false, false)
 					.tab-pane#jobs(role='tabpanel')
 						.row
 							.col-12.col-no-padding.index-container
-								+overview-table(selectedJobs.type,selectedJobs.values, selectedJobs.titles, selectedJobs.keys)
+								+overview-table(selectedJobs.type,selectedJobs.values, selectedJobs.titles, selectedJobs.keys, false, false)
 					.tab-pane#upcoming(role='tabpanel')
 						.row
 							.col-12.col-no-padding.index-container
-								+overview-table(selectedUpcoming.type,selectedUpcoming.values, selectedUpcoming.titles, selectedUpcoming.keys)
+								+overview-table(selectedUpcoming.type,selectedUpcoming.values, selectedUpcoming.titles, selectedUpcoming.keys, false, false)
