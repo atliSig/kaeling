@@ -25,8 +25,8 @@ exports = module.exports = function (app) {
 	 */
 	app.get('/',
 		mw.getUpcomingJobs,
-		mw.getFormsByCurrentUser,
-		mw.getJobsByCurrentUser,
+		mw.getFormsByUser,
+		mw.getJobsByUser,
 		routes.views.index.get);
 	/**
 	 * Overview routes
@@ -59,8 +59,8 @@ exports = module.exports = function (app) {
 		mw.getJobsByCustomerId,
 		routes.views.endpoint.customer.get);
 	app.get('/users/:userId',
-		mw.getFormsByUserId,
-		mw.getJobsByUserId,
+		mw.getFormsByUser,
+		mw.getJobsByUser,
 		mw.getUserById,
 		routes.views.endpoint.user.get);
 

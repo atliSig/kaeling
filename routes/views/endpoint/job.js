@@ -35,7 +35,6 @@ module.exports.editGet = function(req,res){
 module.exports.editPost = function(req,res){
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
-	s
 	view.render('edit/editjob', {
 		currentUser: req.user,
 		job: req.jobById, 

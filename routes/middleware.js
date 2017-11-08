@@ -66,10 +66,13 @@ exports.requireUser = function (req, res, next) {
 };
 
 /**
- * Middleware for the index
+ * Middleware for user
  */
-exports.getFormsByCurrentUser = function (req, res, next) {
-	Form.model.find({ user: req.user._id })
+
+exports.getFormsByUser = function (req, res, next) {
+	var userId = req.user._id;
+	if(req.params.userId){ userId =req.params.userId};
+	Form.model.find({ user: userId })
 		.populate({
 			path: 'job',
 			model: 'Job',
@@ -84,14 +87,18 @@ exports.getFormsByCurrentUser = function (req, res, next) {
 				forms[key].displayDate = moment(forms[key].createdAt).format('MMM Do YY'),
 				forms[key].displayJob = forms[key].job.name;
 				forms[key].displayUser = forms[key].user.name;
+			
 			});
-			req.currentUserForms = forms;
+			req.formsByUser = forms;
 			next();
 		});
 }
 
-exports.getJobsByCurrentUser = function (req, res, next) {
-	Job.model.find({ user: req.user._id })
+exports.getJobsByUser = function (req, res, next) {
+	var userId = req.user._id;
+	if(req.params.userId){ userId =req.params.userId};
+	Job.model.find({ user: userId })
+		.populate('user')
 		.populate('customer')
 		.exec(function (err, jobs) {
 			Object.keys(jobs).forEach(function(key) {
@@ -99,7 +106,7 @@ exports.getJobsByCurrentUser = function (req, res, next) {
 				jobs[key].displayDate = moment(jobs[key].createdAt).format('MMM Do YY');
 				jobs[key].displayUser = jobs[key].user.name;
 			});
-			req.currentUserJobs = jobs;
+			req.jobsByUser = jobs;
 			next();
 		});
 }
@@ -201,20 +208,6 @@ exports.getAllForms = function (req, res, next) {
  * Middleware for endpoints
  */
 
-exports.getJobsByUserId = function (req, res, next) {
-	Job.model.find({ user: req.params.userId })
-		.populate('user')
-		.populate('customer')
-		.exec(function (err, jobs) {
-			Object.keys(jobs).forEach(function(key) {
-				jobs[key].displayCustomer = jobs[key].customer.name;
-				jobs[key].displayDate = moment(jobs[key].createdAt).format('MMM Do YY');
-			});
-			req.jobsByUser = jobs;
-			next();
-		});
-}
-
 exports.getJobById = function (req, res, next) {
 	Job.model.findOne({ _id: req.params.jobId })
 		.populate('user')
@@ -287,27 +280,6 @@ exports.getFormsByJobId = function (req, res, next) {
 				forms[key].displayCustomer = forms[key].job.customer.name;
 			});
 			req.formsByJob = forms;
-			next();
-		});
-}
-
-exports.getFormsByUserId = function (req, res, next) {
-	Form.model.find({ user: req.params.userId })
-		.populate({
-			path: 'job',
-			model: 'Job',
-			populate: {
-				path: 'customer',
-				model: 'Customer'
-			}
-		})
-		.exec(function (err, forms) {
-			Object.keys(forms).forEach(function(key) {
-				forms[key].displayCustomer = forms[key].job.customer.name;
-				forms[key].displayDate = moment(forms[key].createdAt).format('MMM Do YY'),
-				forms[key].displayJob = forms[key].job.name;
-			});
-			req.formsByUser = forms;
 			next();
 		});
 }
